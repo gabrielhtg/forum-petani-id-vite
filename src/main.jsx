@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import "./index.css";
 import LoginPage from "@/pages/login.jsx";
+import RegisterPage from "@/pages/register";
 import SidebarNavbar from "@/pages/sidebarNavbar.jsx";
 import Marketplace from "@/pages/marketplace.jsx";
 import WeatherPage from "@/pages/weather.jsx";
@@ -30,6 +31,10 @@ const router = createBrowserRouter([
     {
         path: "/login",
         element: <LoginPage/>,
+    },
+    {
+        path: "/register",
+        element: <RegisterPage/>,
     }
 
 ]);
