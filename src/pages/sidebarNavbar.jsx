@@ -1,36 +1,36 @@
 import {SidebarInset, SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar.jsx";
 import {AppSidebar} from "@/components/app-sidebar.jsx";
-import {Separator} from "@/components/ui/separator.jsx";
-import {
-    Breadcrumb,
-    BreadcrumbItem,
-    BreadcrumbLink,
-    BreadcrumbList, BreadcrumbPage,
-    BreadcrumbSeparator
-} from "@/components/ui/breadcrumb.jsx";
-import {Outlet} from "react-router-dom";
+import {Link, Outlet} from "react-router-dom";
+import {Button} from "@/components/ui/button.jsx";
 
 export default function SidebarNavbar() {
     return (
         <SidebarProvider>
             <AppSidebar/>
             <SidebarInset>
-                <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4">
+                <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 justify-between">
                     <SidebarTrigger className="-ml-1"/>
-                    <Separator orientation="vertical" className="mr-2 h-4"/>
-                    <Breadcrumb>
-                        <BreadcrumbList>
-                            <BreadcrumbItem className="hidden md:block">
-                                <BreadcrumbLink href="#">
-                                    Building Your Application
-                                </BreadcrumbLink>
-                            </BreadcrumbItem>
-                            <BreadcrumbSeparator className="hidden md:block"/>
-                            <BreadcrumbItem>
-                                <BreadcrumbPage>Data Fetching</BreadcrumbPage>
-                            </BreadcrumbItem>
-                        </BreadcrumbList>
-                    </Breadcrumb>
+                    {/*<Separator orientation="vertical" className="mr-2 h-4"/>*/}
+                    {/*<Breadcrumb>*/}
+                    {/*    <BreadcrumbList>*/}
+                    {/*        <BreadcrumbItem className="hidden md:block">*/}
+                    {/*            <BreadcrumbLink href="#">*/}
+                    {/*                Building Your Application*/}
+                    {/*            </BreadcrumbLink>*/}
+                    {/*        </BreadcrumbItem>*/}
+                    {/*        <BreadcrumbSeparator className="hidden md:block"/>*/}
+                    {/*        <BreadcrumbItem>*/}
+                    {/*            <BreadcrumbPage>Data Fetching</BreadcrumbPage>*/}
+                    {/*        </BreadcrumbItem>*/}
+                    {/*    </BreadcrumbList>*/}
+                    {/*</Breadcrumb>*/}
+                    <div>
+                        <Button asChild={true}>
+                            <Link to={'/login'}>
+                                Login
+                            </Link>
+                        </Button>
+                    </div>
                 </header>
                 <div className="flex flex-1 flex-col gap-4 p-4">
                     <Outlet/>

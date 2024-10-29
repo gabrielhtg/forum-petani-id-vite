@@ -8,6 +8,7 @@ import "./index.css";
 import LoginPage from "@/pages/login.jsx";
 import SidebarNavbar from "@/pages/sidebarNavbar.jsx";
 import Marketplace from "@/pages/marketplace.jsx";
+import WeatherPage from "@/pages/weather.jsx";
 
 const router = createBrowserRouter([
     {
@@ -16,7 +17,13 @@ const router = createBrowserRouter([
         children: [
             {
                 path: 'marketplace',
+                title: 'Marketplace',
                 element: <Marketplace/>,
+            },
+            {
+                path: 'weather',
+                title: 'Weather',
+                element: <WeatherPage/>,
             }
         ]
     },
