@@ -1,8 +1,16 @@
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import {MessageCircle, ThumbsUp, ExternalLink, SendHorizontal} from "lucide-react";
+import {MessageCircle, ThumbsUp, ExternalLink, SendHorizontal, KeyRound} from "lucide-react";
 import { Input } from "@/components/ui/input"
 import {Button} from "@/components/ui/button.jsx";
-
+import {
+    Dialog,
+    DialogContent,
+    DialogDescription,
+    DialogHeader,
+    DialogTitle,
+    DialogTrigger,
+} from "@/components/ui/dialog"
+import {Link} from "react-router-dom";
 
 export default function ForumPost () {
     return (
@@ -18,7 +26,7 @@ export default function ForumPost () {
                 </div>
             </div>
 
-            <div id={'post-content'} className={'flex flex-col'}>
+            <div id={'post-content'} className={'flex flex-col gap-2'}>
                 <div>
                     <p>
                         Hari ini saya sedang mengusir hama yang mengganggu padi saya. Disini saya menggunakan
@@ -29,20 +37,20 @@ export default function ForumPost () {
             </div>
 
             <div id={'post-reaction'} className={'flex w-full justify-evenly'}>
-                <div className={'flex items-center gap-2'}>
+                <Button variant={'ghost'} className={'flex-1'}>
                     <ThumbsUp/>
                     Like
-                </div>
+                </Button>
 
-                <div className={'flex items-center gap-2'}>
+                <Button variant={'ghost'} className={'flex-1'}>
                     <MessageCircle/>
                     Comment
-                </div>
+                </Button>
 
-                <div className={'flex items-center gap-2'}>
+                <Button variant={'ghost'} className={'flex-1'}>
                     <ExternalLink/>
                     Share
-                </div>
+                </Button>
             </div>
 
             <hr/>
@@ -53,9 +61,42 @@ export default function ForumPost () {
                     <AvatarFallback>CN</AvatarFallback>
                 </Avatar>
                 <Input type={'text'} placeholder={'Tulis disini...'}/>
-                <Button>
-                    <SendHorizontal />
-                </Button>
+                <Dialog>
+                    <DialogTrigger asChild={true}>
+                        <Button>
+                            <SendHorizontal />
+                        </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                        <DialogHeader>
+                            <DialogTitle className={'text-center'}>Masuk atau Buat Akun Sekarang!</DialogTitle>
+                            <DialogDescription >
+                                <div className={'flex justify-center flex-col w-full items-center mt-5 gap-3'}>
+                                    <div className={'border w-24 h-24 rounded-full flex items-center justify-center text-4xl'}>
+                                        <KeyRound />
+                                    </div>
+                                    <p>
+                                        Kamu tidak bisa melakukan aksi ini karena belum masuk. Ayooo masuk sekarang juga!!
+                                    </p>
+                                    <div className={'flex w-full gap-3 mt-3'}>
+                                        <Button asChild={true} className={'flex-1'}>
+                                            <Link to={'/login'}>
+                                                Login
+                                            </Link>
+                                        </Button>
+
+                                        <Button asChild={true} className={'flex-1'}>
+                                            <Link to={'/register'}>
+                                                Register
+                                            </Link>
+                                        </Button>
+                                    </div>
+                                </div>
+
+                            </DialogDescription>
+                        </DialogHeader>
+                    </DialogContent>
+                </Dialog>
             </div>
         </div>
     )
