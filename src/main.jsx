@@ -10,12 +10,18 @@ import RegisterPage from "@/pages/register";
 import SidebarNavbar from "@/pages/sidebarNavbar.jsx";
 import Marketplace from "@/pages/marketplace.jsx";
 import WeatherPage from "@/pages/weather.jsx";
+import HomePage from "@/pages/home.jsx";
 
 const router = createBrowserRouter([
     {
         path: "/",
         element: <SidebarNavbar/>,
         children: [
+            {
+                path: '',
+                title: 'Home',
+                element: <HomePage/>,
+            },
             {
                 path: 'marketplace',
                 title: 'Marketplace',
