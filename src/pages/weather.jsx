@@ -19,6 +19,7 @@ const provinsi = dataProvinsi.data
 export default function WeatherPage () {
     const [cityName, setCityName] = useState("Jakarta");
     const [open, setOpen] = React.useState(false)
+    const [namaProvinsi, setNamaProvinsi] = React.useState("")
     const [kodeProvinsi, setKodeProvinsi] = React.useState("")
 
     const optionsWeather = {
@@ -61,8 +62,8 @@ export default function WeatherPage () {
                                         aria-expanded={open}
                                         className="w-full justify-between"
                                     >
-                                        {kodeProvinsi
-                                            ? provinsi.find((e) => e.name === kodeProvinsi)?.name
+                                        {namaProvinsi
+                                            ? provinsi.find((e) => e.name === namaProvinsi)?.name
                                             : "Provinsi"}
                                         <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
                                     </Button>
@@ -75,17 +76,21 @@ export default function WeatherPage () {
                                             <CommandGroup>
                                                 {provinsi.map((e) => (
                                                     <CommandItem
-                                                        key={e.name}
+                                                        key={e.code}
                                                         value={e.name}
                                                         onSelect={(currentValue) => {
-                                                            setKodeProvinsi(currentValue === kodeProvinsi ? "" : currentValue)
+                                                            setNamaProvinsi(currentValue === namaProvinsi ? "" : currentValue)
                                                             setOpen(false)
+
+                                                            setKodeProvinsi(e.code)
+
+                                                            console.log(kodeProvinsi)
                                                         }}
                                                     >
                                                         <Check
                                                             className={cn(
                                                                 "mr-2 h-4 w-4",
-                                                                kodeProvinsi === e.name ? "opacity-100" : "opacity-0"
+                                                                namaProvinsi === e.name ? "opacity-100" : "opacity-0"
                                                             )}
                                                         />
                                                         {e.name}

@@ -3,7 +3,7 @@ export default function AppLogo() {
         <div className={'flex items-center h-[65px] justify-center gap-2'}>
             <img className={'w-[35px] md'} src={'src/assets/logo/logo_tunas_nusantara.png'} alt={'logo'}/>
 
-            <span className={'qwitcher-grypen-bold text-3xl lg:text-4xl'}>Forum Tani ID</span>
+            <span className={'poppins-bold text-2xl lg:text-2xl'}>Forum Tani ID</span>
         </div>
     )
 }
