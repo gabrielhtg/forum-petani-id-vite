@@ -95,7 +95,7 @@ export default function ForumPost() {
                 className={"flex w-full justify-evenly"}
               >
                 <Button variant={"ghost"} className={"flex-1"}>
-                  <ThumbsUp />
+                  <ThumbsUp fill="blue" />
                   Like
                 </Button>
 
