@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   MessageCircle,
@@ -18,7 +19,9 @@ import {
 } from "@/components/ui/dialog";
 import { Link } from "react-router-dom";
 
-export default function ForumPost() {
+export default function ForumPost(props) {
+  const data = props.props;
+  console.log(props);
   return (
     <div
       className={
@@ -27,27 +30,20 @@ export default function ForumPost() {
     >
       <div id={"post-header"} className={"flex gap-3 items-center"}>
         <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarImage src={data.avatar} />
+          <AvatarFallback>{data.user_initial}</AvatarFallback>
         </Avatar>
         <div className={"flex flex-col"}>
-          <span className={"font-bold"}>Gabriel Cesar Hutagalung</span>
-          <span className={"text-slate-500"}>27 Oktober 2024</span>
+          <span className={"font-bold"}>{data.name}</span>
+          <span className={"text-slate-500"}>{data.post_date}</span>
         </div>
       </div>
 
       <div id={"post-content"} className={"flex flex-col gap-2"}>
         <div>
-          <p>
-            Hari ini saya sedang mengusir hama yang mengganggu padi saya. Disini
-            saya menggunakan Insektisida Ares 500ml. Hanya dengan 500ml, sudah
-            cukup untuk 2 hektar lahan padi.
-          </p>
+          <p>{data.post_content}</p>
         </div>
-        <img
-          src="https://acehbesarkab.go.id/media/2022.09/61.jpeg"
-          alt="post-image"
-        />
+        <img src={data.content_image} alt="post-image" />
       </div>
 
       <div id={"post-reaction"} className={"flex w-full justify-evenly"}>
@@ -67,27 +63,20 @@ export default function ForumPost() {
             <div className={"flex flex-col max-w-2xl gap-5"}>
               <div id={"post-header"} className={"flex gap-3 items-center"}>
                 <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarImage src={data.avatar} />
+                  <AvatarFallback>{data.user_initial}</AvatarFallback>
                 </Avatar>
                 <div className={"flex flex-col"}>
-                  <span className={"font-bold"}>Gabriel Cesar Hutagalung</span>
-                  <span className={"text-slate-500"}>27 Oktober 2024</span>
+                  <span className={"font-bold"}>{data.name}</span>
+                  <span className={"text-slate-500"}>{data.post_date}</span>
                 </div>
               </div>
 
               <div id={"post-content"} className={"flex flex-col gap-2"}>
                 <div>
-                  <p>
-                    Hari ini saya sedang mengusir hama yang mengganggu padi
-                    saya. Disini saya menggunakan Insektisida Ares 500ml. Hanya
-                    dengan 500ml, sudah cukup untuk 2 hektar lahan padi.
-                  </p>
+                  <p>{data.post_content}</p>
                 </div>
-                <img
-                  src="https://acehbesarkab.go.id/media/2022.09/61.jpeg"
-                  alt="post-image"
-                />
+                <img src={data.content_image} alt="post-image" />
               </div>
 
               <div
@@ -114,8 +103,8 @@ export default function ForumPost() {
 
               <div className={"flex gap-3 items-center"}>
                 <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarImage src={data.avatar} />
+                  <AvatarFallback>{data.user_initial}</AvatarFallback>
                 </Avatar>
                 <Input type={"text"} placeholder={"Tulis disini..."} />
                 <Dialog>
@@ -175,8 +164,8 @@ export default function ForumPost() {
 
       <div className={"flex gap-3 items-center"}>
         <Avatar>
-          <AvatarImage src="https://github.com/shadcn.png" />
-          <AvatarFallback>CN</AvatarFallback>
+          <AvatarImage src={data.avatar} />
+          <AvatarFallback>{data.user_initial}</AvatarFallback>
         </Avatar>
         <Input type={"text"} placeholder={"Tulis disini..."} />
         <Dialog>
