@@ -1,25 +1,18 @@
 import { Card } from "@/components/ui/card.jsx";
 import { Button } from "@/components/ui/button.jsx";
 import { Phone, MapPin } from "lucide-react";
+import {dataMarketplace} from "@/data/data-marketplace.js";
+import {Truncate} from "@re-dev/react-truncate";
 
 export default function Marketplace() {
-  const data = [
-    {
-      gambar: "src/assets/temp/jualan1.png",
-      nama_produk: "Bibit padi unggul kualitas super.",
-      harga: "Rp300.000,-",
-      nama_toko: "UD. Gabriel",
-      lokasi: "Sibolga",
-    },
-  ];
 
   return (
-    <div className={"flex w-full items-center p-5 gap-5 flex-wrap"}>
-      {data.map((item, index) => (
+    <div className={"flex w-full items-center p-1 md:p-5 gap-3 md:gap-5 flex-wrap justify-center"}>
+      {dataMarketplace.map((item, index) => (
         <Card
           key={index}
           className={
-            "flex flex-col w-[160px] md:w-full max-w-[250px] p-5 gap-3"
+            "flex flex-col w-[150px] md:w-full max-w-[250px] p-5 gap-3"
           }
         >
           <div>
@@ -32,18 +25,24 @@ export default function Marketplace() {
             />
           </div>
 
-          <div>
-            <span className={"text-gray-500 font-extralight block"}>
-              {item.nama_produk}
-            </span>
+          <div className={'flex flex-col'}>
+            <Truncate
+                lines={2}
+                ellipsis={
+                  <span>...</span>
+                }
+                onTruncate={(didTruncate) => {
+                  console.log(didTruncate)
+                }}
+            >
+              <span className={"text-gray-500 font-extralight"}> {item.nama_produk}</span>
+            </Truncate>
             <span className={"font-bold text-sm"}>{item.harga}</span>
           </div>
 
           <div>
-            <Button>
-              <span className={"text-xs flex gap-1"}>
-                <Phone /> Chat Penjual
-              </span>
+            <Button className={"text-xs flex gap-1"}>
+              <Phone size={6}/> Chat <span className={"hidden md:flex"}>Penjual</span>
             </Button>
             <span
               className={"text-gray-500 text-sm flex mt-3 items-center gap-1"}
