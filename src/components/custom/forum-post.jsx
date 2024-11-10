@@ -21,7 +21,7 @@ import { Link } from "react-router-dom";
 
 export default function ForumPost(props) {
   const data = props.props;
-  console.log(props);
+
   return (
     <div
       className={
@@ -49,14 +49,14 @@ export default function ForumPost(props) {
       <div id={"post-reaction"} className={"flex w-full justify-evenly"}>
         <Button variant={"ghost"} className={"flex-1"}>
           <ThumbsUp />
-          Like
+          Like {data.likes}
         </Button>
 
         <Dialog>
           <DialogTrigger asChild>
             <Button variant={"ghost"} className={"flex-1"}>
               <MessageCircle />
-              Comment
+              Comment {data.comments.length}
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-2xl">
@@ -85,12 +85,12 @@ export default function ForumPost(props) {
               >
                 <Button variant={"ghost"} className={"flex-1"}>
                   <ThumbsUp fill="blue" />
-                  Like
+                  Like {data.likes}
                 </Button>
 
                 <Button variant={"ghost"} className={"flex-1"}>
                   <MessageCircle />
-                  Comment
+                  Comment {data.comments.length}
                 </Button>
 
                 <Button variant={"ghost"} className={"flex-1"}>
@@ -100,6 +100,22 @@ export default function ForumPost(props) {
               </div>
 
               <hr />
+
+              <div className="comments-section">
+                {data.comments.map((comment, index) => (
+                  <div key={index} className={"flex gap-3 items-center mb-2"}>
+                    <Avatar>
+                      <AvatarImage src={"https://i.pravatar.cc/150"} />
+                      <AvatarFallback>{comment.name[0]}</AvatarFallback>
+                    </Avatar>
+                    <div className="comment-content">
+                      <span className="font-bold">{comment.name}</span>
+                      <p>{comment.content}</p>
+                      <span className="text-slate-500">{comment.date}</span>
+                    </div>
+                  </div>
+                ))}
+              </div>
 
               <div className={"flex gap-3 items-center"}>
                 <Avatar>
@@ -139,7 +155,6 @@ export default function ForumPost(props) {
                             <Button asChild={true} className={"flex-1"}>
                               <Link to={"/login"}>Login</Link>
                             </Button>
-
                             <Button asChild={true} className={"flex-1"}>
                               <Link to={"/register"}>Register</Link>
                             </Button>
@@ -200,7 +215,6 @@ export default function ForumPost(props) {
                     <Button asChild={true} className={"flex-1"}>
                       <Link to={"/login"}>Login</Link>
                     </Button>
-
                     <Button asChild={true} className={"flex-1"}>
                       <Link to={"/register"}>Register</Link>
                     </Button>
