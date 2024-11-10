@@ -21,79 +21,74 @@ import { Link } from "react-router-dom";
 
 export default function ForumPost(props) {
   const data = props.props;
+  const comments = data.comments;
+  const likes = data.likes;
 
   return (
-    <div
-      className={
-        "flex flex-col border shadow-sm max-w-2xl rounded-lg p-5 gap-5"
-      }
-    >
-      <div id={"post-header"} className={"flex gap-3 items-center"}>
+    <div className="flex flex-col border shadow-sm max-w-2xl rounded-lg p-5 gap-5">
+      <div id="post-header" className="flex gap-3 items-center">
         <Avatar>
           <AvatarImage src={data.avatar} />
           <AvatarFallback>{data.user_initial}</AvatarFallback>
         </Avatar>
-        <div className={"flex flex-col"}>
-          <span className={"font-bold"}>{data.name}</span>
-          <span className={"text-slate-500"}>{data.post_date}</span>
+        <div className="flex flex-col">
+          <span className="font-bold">{data.name}</span>
+          <span className="text-slate-500">{data.post_date}</span>
         </div>
       </div>
 
-      <div id={"post-content"} className={"flex flex-col gap-2"}>
+      <div id="post-content" className="flex flex-col gap-2">
         <div>
           <p>{data.post_content}</p>
         </div>
         <img src={data.content_image} alt="post-image" />
       </div>
 
-      <div id={"post-reaction"} className={"flex w-full justify-evenly"}>
-        <Button variant={"ghost"} className={"flex-1"}>
+      <div id="post-reaction" className="flex w-full justify-evenly">
+        <Button variant="ghost" className="flex-1">
           <ThumbsUp />
-          Like {data.likes}
+          Like {likes}
         </Button>
 
         <Dialog>
           <DialogTrigger asChild>
-            <Button variant={"ghost"} className={"flex-1"}>
+            <Button variant="ghost" className="flex-1">
               <MessageCircle />
-              Comment {data.comments.length}
+              Comment {comments.length}
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-2xl">
-            <div className={"flex flex-col max-w-2xl gap-5"}>
-              <div id={"post-header"} className={"flex gap-3 items-center"}>
+            <div className="flex flex-col max-w-2xl gap-5">
+              <div id="post-header" className="flex gap-3 items-center">
                 <Avatar>
                   <AvatarImage src={data.avatar} />
                   <AvatarFallback>{data.user_initial}</AvatarFallback>
                 </Avatar>
-                <div className={"flex flex-col"}>
-                  <span className={"font-bold"}>{data.name}</span>
-                  <span className={"text-slate-500"}>{data.post_date}</span>
+                <div className="flex flex-col">
+                  <span className="font-bold">{data.name}</span>
+                  <span className="text-slate-500">{data.post_date}</span>
                 </div>
               </div>
 
-              <div id={"post-content"} className={"flex flex-col gap-2"}>
+              <div id="post-content" className="flex flex-col gap-2">
                 <div>
                   <p>{data.post_content}</p>
                 </div>
                 <img src={data.content_image} alt="post-image" />
               </div>
 
-              <div
-                id={"post-reaction"}
-                className={"flex w-full justify-evenly"}
-              >
-                <Button variant={"ghost"} className={"flex-1"}>
+              <div id="post-reaction" className="flex w-full justify-evenly">
+                <Button variant="ghost" className="flex-1">
                   <ThumbsUp fill="blue" />
-                  Like {data.likes}
+                  Like {likes}
                 </Button>
 
-                <Button variant={"ghost"} className={"flex-1"}>
+                <Button variant="ghost" className="flex-1">
                   <MessageCircle />
-                  Comment {data.comments.length}
+                  Comment {comments.length}{" "}
                 </Button>
 
-                <Button variant={"ghost"} className={"flex-1"}>
+                <Button variant="ghost" className="flex-1">
                   <ExternalLink />
                   Share
                 </Button>
@@ -102,10 +97,10 @@ export default function ForumPost(props) {
               <hr />
 
               <div className="comments-section">
-                {data.comments.map((comment, index) => (
-                  <div key={index} className={"flex gap-3 items-center mb-2"}>
+                {comments.map((comment, index) => (
+                  <div key={index} className="flex gap-3 items-center mb-2">
                     <Avatar>
-                      <AvatarImage src={"https://i.pravatar.cc/150"} />
+                      <AvatarImage src="https://i.pravatar.cc/150" />
                       <AvatarFallback>{comment.name[0]}</AvatarFallback>
                     </Avatar>
                     <div className="comment-content">
@@ -117,46 +112,38 @@ export default function ForumPost(props) {
                 ))}
               </div>
 
-              <div className={"flex gap-3 items-center"}>
+              <div className="flex gap-3 items-center">
                 <Avatar>
                   <AvatarImage src={data.avatar} />
                   <AvatarFallback>{data.user_initial}</AvatarFallback>
                 </Avatar>
-                <Input type={"text"} placeholder={"Tulis disini..."} />
+                <Input type="text" placeholder="Tulis disini..." />
                 <Dialog>
-                  <DialogTrigger asChild={true}>
+                  <DialogTrigger asChild>
                     <Button>
                       <SendHorizontal />
                     </Button>
                   </DialogTrigger>
                   <DialogContent>
                     <DialogHeader>
-                      <DialogTitle className={"text-center"}>
+                      <DialogTitle className="text-center">
                         Masuk atau Buat Akun Sekarang!
                       </DialogTitle>
                       <DialogDescription>
-                        <div
-                          className={
-                            "flex justify-center flex-col w-full items-center mt-5 gap-3"
-                          }
-                        >
-                          <div
-                            className={
-                              "border w-24 h-24 rounded-full flex items-center justify-center text-4xl"
-                            }
-                          >
+                        <div className="flex justify-center flex-col w-full items-center mt-5 gap-3">
+                          <div className="border w-24 h-24 rounded-full flex items-center justify-center text-4xl">
                             <KeyRound />
                           </div>
                           <p>
                             Kamu tidak bisa melakukan aksi ini karena belum
                             masuk. Ayooo masuk sekarang juga!!
                           </p>
-                          <div className={"flex w-full gap-3 mt-3"}>
-                            <Button asChild={true} className={"flex-1"}>
-                              <Link to={"/login"}>Login</Link>
+                          <div className="flex w-full gap-3 mt-3">
+                            <Button asChild className="flex-1">
+                              <Link to="/login">Login</Link>
                             </Button>
-                            <Button asChild={true} className={"flex-1"}>
-                              <Link to={"/register"}>Register</Link>
+                            <Button asChild className="flex-1">
+                              <Link to="/register">Register</Link>
                             </Button>
                           </div>
                         </div>
@@ -169,7 +156,7 @@ export default function ForumPost(props) {
           </DialogContent>
         </Dialog>
 
-        <Button variant={"ghost"} className={"flex-1"}>
+        <Button variant="ghost" className="flex-1">
           <ExternalLink />
           Share
         </Button>
@@ -177,46 +164,38 @@ export default function ForumPost(props) {
 
       <hr />
 
-      <div className={"flex gap-3 items-center"}>
+      <div className="flex gap-3 items-center">
         <Avatar>
           <AvatarImage src={data.avatar} />
           <AvatarFallback>{data.user_initial}</AvatarFallback>
         </Avatar>
-        <Input type={"text"} placeholder={"Tulis disini..."} />
+        <Input type="text" placeholder="Tulis disini..." />
         <Dialog>
-          <DialogTrigger asChild={true}>
+          <DialogTrigger asChild>
             <Button>
               <SendHorizontal />
             </Button>
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle className={"text-center"}>
+              <DialogTitle className="text-center">
                 Masuk atau Buat Akun Sekarang!
               </DialogTitle>
               <DialogDescription>
-                <div
-                  className={
-                    "flex justify-center flex-col w-full items-center mt-5 gap-3"
-                  }
-                >
-                  <div
-                    className={
-                      "border w-24 h-24 rounded-full flex items-center justify-center text-4xl"
-                    }
-                  >
+                <div className="flex justify-center flex-col w-full items-center mt-5 gap-3">
+                  <div className="border w-24 h-24 rounded-full flex items-center justify-center text-4xl">
                     <KeyRound />
                   </div>
                   <p>
                     Kamu tidak bisa melakukan aksi ini karena belum masuk. Ayooo
                     masuk sekarang juga!!
                   </p>
-                  <div className={"flex w-full gap-3 mt-3"}>
-                    <Button asChild={true} className={"flex-1"}>
-                      <Link to={"/login"}>Login</Link>
+                  <div className="flex w-full gap-3 mt-3">
+                    <Button asChild className="flex-1">
+                      <Link to="/login">Login</Link>
                     </Button>
-                    <Button asChild={true} className={"flex-1"}>
-                      <Link to={"/register"}>Register</Link>
+                    <Button asChild className="flex-1">
+                      <Link to="/register">Register</Link>
                     </Button>
                   </div>
                 </div>
