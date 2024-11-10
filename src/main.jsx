@@ -11,6 +11,7 @@ import SidebarNavbar from "@/pages/sidebarNavbar.jsx";
 import Marketplace from "@/pages/marketplace.jsx";
 import WeatherPage from "@/pages/weather.jsx";
 import HomePage from "@/pages/home.jsx";
+import ItemDetail from "@/pages/item-detail.jsx";
 
 const router = createBrowserRouter([
     {
@@ -31,7 +32,12 @@ const router = createBrowserRouter([
                 path: 'weather',
                 title: 'Weather',
                 element: <WeatherPage/>,
-            }
+            },
+            {
+                path: 'marketplace/:id', // route dinamis untuk halaman detail
+                title: 'Item Detail',
+                element: <ItemDetail />,
+            },
         ]
     },
     {

@@ -3,8 +3,14 @@ import { Button } from "@/components/ui/button.jsx";
 import { Phone, MapPin } from "lucide-react";
 import {dataMarketplace} from "@/data/data-marketplace.js";
 import {Truncate} from "@re-dev/react-truncate";
+import {useNavigate} from "react-router-dom";
 
 export default function Marketplace() {
+  const navigate = useNavigate(); // Gunakan useNavigate untuk navigasi
+
+  const handleCardClick = (id) => {
+    navigate(`/marketplace/${id}`); // Gunakan navigate untuk berpindah halaman
+  };
 
   return (
     <div className={"flex w-full items-center p-1 md:p-5 gap-3 md:gap-5 flex-wrap justify-center"}>
@@ -14,6 +20,7 @@ export default function Marketplace() {
           className={
             "flex flex-col w-[150px] md:w-full max-w-[250px] p-5 gap-3"
           }
+          onClick={() => handleCardClick(item.id)}
         >
           <div>
             <img
