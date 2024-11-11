@@ -1,4 +1,4 @@
-import { Check, MapPin } from "lucide-react";
+import { MapPin } from "lucide-react";
 import { Button } from "@/components/ui/button.jsx";
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -9,14 +9,10 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog.jsx";
-import { dataProvinsi } from "@/data/data-provinsi.js";
-import { cn } from "@/lib/utils.js";
-
-const provinsi = dataProvinsi.data;
+import {capitalize} from "@/services/capitalize.js";
 
 export default function WeatherPage() {
   const [cityName, setCityName] = useState("Jakarta");
-  const [namaProvinsi, setNamaProvinsi] = useState("");
   const [namaKota, setNamaKota] = useState("");
   const [kotaData, setKotaData] = useState([]);
   const [weatherData, setWeatherData] = useState(null);
@@ -30,6 +26,7 @@ export default function WeatherPage() {
             lon,
             appid: apiKey,
             units: "metric",
+            lang: "id",
           },
         })
         .then((res) => {
@@ -123,13 +120,9 @@ export default function WeatherPage() {
                                 fetchDataWeather(kota.coord.lat, kota.coord.lon);
                               }}
                           >
-                            <Check
-                                className={cn(
-                                    "mr-2 h-4 w-4",
-                                    namaKota === kota.name ? "opacity-100" : "opacity-0"
-                                )}
-                            />
-                            {kota.name}
+                              <div className={namaKota.toLowerCase() === kota.name.toLowerCase() ? "opacity-100" : "opacity-0"}>
+                                  {kota.name}
+                              </div>
                           </li>
                       ))
                   )}
@@ -147,7 +140,7 @@ export default function WeatherPage() {
               {Math.round(weatherData.main.temp)}°C
             </span>
                 <span className={"text-xl"}>
-              {weatherData.weather[0].description}
+              {capitalize(weatherData.weather[0].description)}
             </span>
                 <div className={"text-lg mt-4"}>
                   <p>Kecepatan Angin: {weatherData.wind.speed} m/s</p>
