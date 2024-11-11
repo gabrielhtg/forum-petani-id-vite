@@ -13,6 +13,7 @@ import WeatherPage from "@/pages/weather.jsx";
 import HomePage from "@/pages/home.jsx";
 import ItemDetail from "@/pages/item-detail.jsx";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage"; // Import halaman lupa sandi
+import ProfilePage from "@/pages/profile.jsx";
 
 const router = createBrowserRouter([
     {
@@ -38,6 +39,11 @@ const router = createBrowserRouter([
                 path: 'marketplace/:id', // route dinamis untuk halaman detail
                 title: 'Item Detail',
                 element: <ItemDetail />,
+            },
+            {
+                path: 'profile', // Tambahkan path ini untuk halaman profile
+                title: 'Profile',
+                element: <ProfilePage />,
             },
         ]
     },

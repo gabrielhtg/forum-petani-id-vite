@@ -6,6 +6,7 @@ import {
 } from "@/components/ui/card.jsx";
 import { Button } from "@/components/ui/button.jsx";
 import { Input } from "@/components/ui/input.jsx"; // Pastikan komponen Input tersedia di folder Anda
+import { Link } from "react-router-dom";
 
 export default function ProfilePage() {
   // Data profil contoh; data ini bisa diambil dari backend atau context
