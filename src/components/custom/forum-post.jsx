@@ -46,15 +46,19 @@ export default function ForumPost(props) {
 
       <div id="post-reaction" className="flex w-full justify-evenly">
         <Button variant="ghost" className="flex-1">
-          <ThumbsUp />
-          Like {likes}
+          <span className="flex items-center gap-1">
+            <ThumbsUp /> {likes}
+          </span>
+          <span>Like</span>
         </Button>
 
         <Dialog>
           <DialogTrigger asChild>
             <Button variant="ghost" className="flex-1">
-              <MessageCircle />
-              Comment {comments.length}
+              <span className="flex items-center gap-1">
+                <MessageCircle /> {comments.length}
+              </span>
+              <span>Comment</span>
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-2xl">
@@ -79,13 +83,17 @@ export default function ForumPost(props) {
 
               <div id="post-reaction" className="flex w-full justify-evenly">
                 <Button variant="ghost" className="flex-1">
-                  <ThumbsUp fill="blue" />
-                  Like {likes}
+                  <span className="flex items-center gap-1">
+                    <ThumbsUp fill="blue" /> {likes}
+                  </span>
+                  <span>Like</span>
                 </Button>
 
                 <Button variant="ghost" className="flex-1">
-                  <MessageCircle />
-                  Comment {comments.length}{" "}
+                  <span className="flex items-center gap-1">
+                    <MessageCircle /> {comments.length}
+                  </span>
+                  <span>Comment</span>
                 </Button>
 
                 <Button variant="ghost" className="flex-1">
