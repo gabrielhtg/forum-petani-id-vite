@@ -61,7 +61,7 @@ export default function ForumPost(props) {
               <span className={'hidden md:block'}>Comment</span>
             </Button>
           </DialogTrigger>
-          <DialogContent className="sm:max-w-2xl overflow-auto max-h-[calc(100vh-90px)]">
+          <DialogContent className="sm:max-w-2xl overflow-y-scroll max-h-[calc(100vh-90px)]">
             <div className="flex flex-col max-w-2xl gap-5">
               <div id="post-header" className="flex gap-3 items-center">
                 <Avatar>
