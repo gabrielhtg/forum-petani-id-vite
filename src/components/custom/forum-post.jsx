@@ -106,7 +106,7 @@ export default function ForumPost(props) {
 
               <div className="comments-section">
                 {comments.map((comment, index) => (
-                  <div key={index} className="flex gap-3 items-center mb-2">
+                  <div key={index} className="flex gap-3 items-center mb-2 bg-slate-100 p-3 rounded-lg">
                     <Avatar>
                       <AvatarImage src="https://i.pravatar.cc/150" />
                       <AvatarFallback>{comment.name[0]}</AvatarFallback>
