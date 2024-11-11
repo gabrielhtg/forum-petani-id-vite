@@ -49,7 +49,7 @@ export default function ForumPost(props) {
           <span className="flex items-center gap-1">
             <ThumbsUp /> {likes}
           </span>
-          <span>Like</span>
+          <span className={'hidden md:block'}>Like</span>
         </Button>
 
         <Dialog>
@@ -58,7 +58,7 @@ export default function ForumPost(props) {
               <span className="flex items-center gap-1">
                 <MessageCircle /> {comments.length}
               </span>
-              <span>Comment</span>
+              <span className={'hidden md:block'}>Comment</span>
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-2xl">
@@ -86,14 +86,14 @@ export default function ForumPost(props) {
                   <span className="flex items-center gap-1">
                     <ThumbsUp fill="blue" /> {likes}
                   </span>
-                  <span>Like</span>
+                  <span className={'hidden md:block'}>Like</span>
                 </Button>
 
                 <Button variant="ghost" className="flex-1">
                   <span className="flex items-center gap-1">
                     <MessageCircle /> {comments.length}
                   </span>
-                  <span>Comment</span>
+                  <span className={'hidden md:block'}>Comment</span>
                 </Button>
 
                 <Button variant="ghost" className="flex-1">
@@ -166,7 +166,7 @@ export default function ForumPost(props) {
 
         <Button variant="ghost" className="flex-1">
           <ExternalLink />
-          Share
+          <span className={'hidden md:block'}>Share</span>
         </Button>
       </div>
 
