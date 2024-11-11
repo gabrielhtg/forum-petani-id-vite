@@ -12,6 +12,7 @@ import Marketplace from "@/pages/marketplace.jsx";
 import WeatherPage from "@/pages/weather.jsx";
 import HomePage from "@/pages/home.jsx";
 import ItemDetail from "@/pages/item-detail.jsx";
+import ForgotPasswordPage from "@/pages/ForgotPasswordPage"; // Import halaman lupa sandi
 
 const router = createBrowserRouter([
     {
@@ -47,12 +48,15 @@ const router = createBrowserRouter([
     {
         path: "/register",
         element: <RegisterPage/>,
+    },
+    {
+        path: "/forgot-password", // Tambahkan rute lupa sandi di sini
+        element: <ForgotPasswordPage />,
     }
-
 ]);
 
 ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
         <RouterProvider router={router} />
     </React.StrictMode>
-)
+);
