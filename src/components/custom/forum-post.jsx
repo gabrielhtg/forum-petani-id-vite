@@ -41,7 +41,7 @@ export default function ForumPost(props) {
         <div>
           <p>{data.post_content}</p>
         </div>
-        <img src={data.content_image} alt="post-image" />
+        <img src={data.content_image} alt="post-image"  loading={'lazy'}/>
       </div>
 
       <div id="post-reaction" className="flex w-full justify-evenly">
@@ -74,7 +74,7 @@ export default function ForumPost(props) {
                 <div>
                   <p>{data.post_content}</p>
                 </div>
-                <img src={data.content_image} alt="post-image" />
+                <img src={data.content_image} alt="post-image" loading={'lazy'}/>
               </div>
 
               <div id="post-reaction" className="flex w-full justify-evenly">

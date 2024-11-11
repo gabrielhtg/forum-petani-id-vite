@@ -19,19 +19,22 @@ export default function WeatherPage() {
   const [namaProvinsi, setNamaProvinsi] = useState("");
   const [namaKota, setNamaKota] = useState("");
   const [kotaData, setKotaData] = useState([]);
-  const [weatherData, setWeatherData] = useState(null); // State untuk menyimpan data cuaca
-  const apiKey = "3f0837f03aab493880ecc11f2aeb6bcc"; // OpenWeather API Key
+  const [weatherData, setWeatherData] = useState(null);
+  const apiKey = "3f0837f03aab493880ecc11f2aeb6bcc";
 
-  const optionsWeather = {
-    method: "GET",
-    url: `https://api.openweathermap.org/data/2.5/weather?q=${cityName},ID&appid=${apiKey}&units=metric`,
-  };
-
-  const fetchDataWeather = () => {
+  const fetchDataWeather = (lat, lon) => {
     axios
-        .request(optionsWeather)
+        .get("https://api.openweathermap.org/data/2.5/weather", {
+          params: {
+            lat,
+            lon,
+            appid: apiKey,
+            units: "metric",
+          },
+        })
         .then((res) => {
           setWeatherData(res.data);
+          setCityName(res.data.name);
         })
         .catch((err) => console.error(err));
   };
@@ -39,7 +42,7 @@ export default function WeatherPage() {
   const fetchDataCity = () => {
     if (namaKota) {
       axios
-          .get(`https://api.openweathermap.org/data/2.5/find`, {
+          .get("https://api.openweathermap.org/data/2.5/find", {
             params: {
               q: `${namaKota},ID`,
               type: "like",
@@ -53,13 +56,32 @@ export default function WeatherPage() {
     }
   };
 
-  // Debounce effect for city search input
+  const getCurrentLocationWeather = () => {
+    if (navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+          (position) => {
+            const { latitude, longitude } = position.coords;
+            fetchDataWeather(latitude, longitude);
+          },
+          (error) => {
+            console.error("Error fetching location:", error);
+          }
+      );
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  };
+
+  useEffect(() => {
+    getCurrentLocationWeather(); // Dapatkan cuaca berdasarkan lokasi saat ini saat komponen pertama kali di-render
+  }, []);
+
   useEffect(() => {
     const delayDebounceFn = setTimeout(() => {
       if (namaKota) {
         fetchDataCity();
       }
-    }, 500); // Delay search API call by 500ms
+    }, 500);
 
     return () => clearTimeout(delayDebounceFn);
   }, [namaKota]);
@@ -77,23 +99,6 @@ export default function WeatherPage() {
               <DialogTitle>Pilih Lokasi Anda</DialogTitle>
 
               <div className={"w-full flex flex-col gap-3"}>
-                {/* Provinsi Selector */}
-                <select
-                    className="border p-2 rounded w-full"
-                    value={namaProvinsi}
-                    onChange={(e) => {
-                      setNamaProvinsi(e.target.value);
-                      setKotaData([]); // Clear city data when changing province
-                    }}
-                >
-                  <option value="">Pilih Provinsi</option>
-                  {provinsi.map((prov) => (
-                      <option key={prov.code} value={prov.name}>
-                        {prov.name}
-                      </option>
-                  ))}
-                </select>
-
                 {/* Kota Search Input */}
                 <input
                     type="text"
@@ -115,7 +120,7 @@ export default function WeatherPage() {
                               onClick={() => {
                                 setNamaKota(kota.name);
                                 setCityName(kota.name);
-                                fetchDataWeather();
+                                fetchDataWeather(kota.coord.lat, kota.coord.lon);
                               }}
                           >
                             <Check

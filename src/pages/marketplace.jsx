@@ -29,6 +29,7 @@ export default function Marketplace() {
               alt={"petani"}
               width={500}
               height={500}
+              loading={'lazy'}
             />
           </div>
 
