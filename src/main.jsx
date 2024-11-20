@@ -15,6 +15,7 @@ import ItemDetail from "@/pages/item-detail.jsx";
 import ForgotPasswordPage from "@/pages/ForgotPasswordPage"; // Import halaman lupa sandi
 import ProfilePage from "@/pages/profile.jsx";
 import PopularPage from "@/pages/popular.jsx";
+// import KomunitasPage from "@/pages/komunitas.jsx";
 
 const router = createBrowserRouter([
     {
@@ -50,7 +51,13 @@ const router = createBrowserRouter([
                 path: 'popular',
                 title: "Popular",
                 element: <PopularPage />,
-            }
+            },
+            // {
+            //     path: 'komunitas',
+            //     title: "Komunitas",
+            //     element: <KomunitasPage />,
+            // }
+            
         ]
     },
     {
