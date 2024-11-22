@@ -33,23 +33,22 @@ export default function RegisterPage() {
         username: username,
         password:password,
         pekerjaan: pekerjaan,
-        nomorTelepone: nomorTelepone,
+        nomorTelepon: nomorTelepone,
         confirmPassword: confirmPassword
       });
 
-      localStorage.setItem('token', response.data.token)
       toast({
-        title: "Uh oh! Something went wrong.",
-        description: "There was a problem with your request.",
-        action: <ToastAction altText="Try again" asChild={true}>
-         <Link to={"/login.jsx"} > Ayo masuk sekarang!!! </Link>
-        </ToastAction>,
+        title: "Success",
+        description: response.data.data,
+        action: <ToastAction asChild altText="Ayo masuk sekarang!">
+          <Link to="/login">Ayo masuk sekarang!</Link>
+        </ToastAction>
       })
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Oppps...",
-        description: "Kredensial tidak tepat!",
+        description: error.response.data.data,
       })
       console.error("Login gagal:", error.response?.data || error.message);
     }
@@ -83,7 +82,7 @@ export default function RegisterPage() {
         </CardContent>
         <CardFooter>
           <div className={"flex flex-col gap-3 w-full"}>
-            <Button className={"w-full"} onClick={handleRegister()}>
+            <Button className={"w-full"} onClick={handleRegister}>
              Daftar
             </Button>
             <Button variant={"secondary"} className={"w-full"} asChild={true}>
