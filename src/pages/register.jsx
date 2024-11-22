@@ -1,7 +1,6 @@
 import {
   Card,
   CardContent,
-  CardDescription,
   CardFooter,
   CardHeader,
   CardTitle,
@@ -9,8 +8,53 @@ import {
 import { Input } from "@/components/ui/input.jsx";
 import { Button } from "@/components/ui/button.jsx";
 import { Link } from "react-router-dom";
+import {useState} from "react";
+import axios from "axios";
+import {apiUrl} from "@/env.js";
+import {useToast} from "@/hooks/use-toast.js";
+import {ToastAction} from "@/components/ui/toast.jsx";
+import {Toaster} from "@/components/ui/toaster.jsx";
 
 export default function RegisterPage() {
+  const [email, setEmail] = useState("");
+  const [nama, setNama] = useState("");
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [pekerjaan, setPekerjaan] = useState("");
+  const [nomorTelepone, setNomorTelepone] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
+  const {toast} = useToast()
+
+  const handleRegister = async () => {
+    try {
+      const response = await axios.post(`${apiUrl}/api/users`, {
+        email: email,
+        nama: nama,
+        username: username,
+        password:password,
+        pekerjaan: pekerjaan,
+        nomorTelepone: nomorTelepone,
+        confirmPassword: confirmPassword
+      });
+
+      localStorage.setItem('token', response.data.token)
+      toast({
+        title: "Uh oh! Something went wrong.",
+        description: "There was a problem with your request.",
+        action: <ToastAction altText="Try again" asChild={true}>
+         <Link to={"/login.jsx"} > Ayo masuk sekarang!!! </Link>
+        </ToastAction>,
+      })
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Oppps...",
+        description: "Kredensial tidak tepat!",
+      })
+      console.error("Login gagal:", error.response?.data || error.message);
+    }
+  };
+
   return (
     <div className="flex h-[calc(100vh-8vh)] lg:h-screen w-full items-center justify-center p-5">
       <Card className="w-full max-w-md">
@@ -27,17 +71,20 @@ export default function RegisterPage() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-3 w-full">
-            <Input type="email" placeholder="Email" />
-            <Input type="text" placeholder="Nama Lengkap" />
-            <Input type="text" placeholder="Username" />
-            <Input type="password" placeholder="Password" />
-            <Input type="password" placeholder="Confirm Password" />
+            <Input onChange={(e)=>{setEmail(e.target.value)}} type="email" placeholder="Email" />
+            <Input onChange={(e)=>{setNama(e.target.value)}} type="text" placeholder="Nama Lengkap" />
+            <Input onChange={(e)=>{setUsername(e.target.value)}} type="text" placeholder="Username" />
+            <Input onChange={(e)=>{setPassword(e.target.value)}} type="password" placeholder="Password" />
+            <Input onChange={(e)=>{setConfirmPassword(e.target.value)}} type="password" placeholder="Confirm Password" />
+            <Input onChange={(e)=>{setPekerjaan(e.target.value)}} type="text" placeholder="Pekerjaan" />
+            <Input onChange={(e)=>{setNomorTelepone(e.target.value)}} type="text" placeholder="Nomor Telepon" />
+
           </div>
         </CardContent>
         <CardFooter>
           <div className={"flex flex-col gap-3 w-full"}>
-            <Button className={"w-full"} asChild={true}>
-              <Link to={"/login"}>Daftar</Link>
+            <Button className={"w-full"} onClick={handleRegister()}>
+             Daftar
             </Button>
             <Button variant={"secondary"} className={"w-full"} asChild={true}>
               <Link to={"/login"}>Kembali ke Login</Link>
@@ -45,6 +92,8 @@ export default function RegisterPage() {
           </div>
         </CardFooter>
       </Card>
+
+      <Toaster/>
     </div>
   );
 }
