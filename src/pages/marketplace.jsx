@@ -75,7 +75,7 @@ export default function Marketplace() {
         </div>
 
         <img
-            className={"w-72 md"}
+            className={"w-36 lg:w-52 xl:w-72 md"}
             src={"src/assets/marketplace/asset1.jpg"}
             alt={"logo"}
         />
