@@ -26,6 +26,7 @@ export default function ForumPost(props) {
 
   return (
     <div className="flex flex-col border shadow-sm max-w-2xl rounded-lg p-5 gap-5">
+      {/* Postingan yang ada */}
       <div id="post-header" className="flex gap-3 items-center">
         <Avatar>
           <AvatarImage src={data.avatar} />
@@ -41,7 +42,7 @@ export default function ForumPost(props) {
         <div>
           <p>{data.post_content}</p>
         </div>
-        <img src={data.content_image} alt="post-image"  loading={'lazy'}/>
+        <img src={data.content_image} alt="post-image" loading={"lazy"} />
       </div>
 
       <div id="post-reaction" className="flex w-full justify-evenly">
@@ -49,7 +50,7 @@ export default function ForumPost(props) {
           <span className="flex items-center gap-1">
             <ThumbsUp /> {likes}
           </span>
-          <span className={'hidden md:block'}>Like</span>
+          <span className={"hidden md:block"}>Like</span>
         </Button>
 
         <Dialog>
@@ -58,7 +59,7 @@ export default function ForumPost(props) {
               <span className="flex items-center gap-1">
                 <MessageCircle /> {comments.length}
               </span>
-              <span className={'hidden md:block'}>Comment</span>
+              <span className={"hidden md:block"}>Comment</span>
             </Button>
           </DialogTrigger>
           <DialogContent className="sm:max-w-2xl overflow-y-scroll max-h-[calc(100vh-90px)]">
@@ -78,7 +79,11 @@ export default function ForumPost(props) {
                 <div>
                   <p>{data.post_content}</p>
                 </div>
-                <img src={data.content_image} alt="post-image" loading={'lazy'}/>
+                <img
+                  src={data.content_image}
+                  alt="post-image"
+                  loading={"lazy"}
+                />
               </div>
 
               <div id="post-reaction" className="flex w-full justify-evenly">
@@ -86,14 +91,14 @@ export default function ForumPost(props) {
                   <span className="flex items-center gap-1">
                     <ThumbsUp fill="blue" /> {likes}
                   </span>
-                  <span className={'hidden md:block'}>Like</span>
+                  <span className={"hidden md:block"}>Like</span>
                 </Button>
 
                 <Button variant="ghost" className="flex-1">
                   <span className="flex items-center gap-1">
                     <MessageCircle /> {comments.length}
                   </span>
-                  <span className={'hidden md:block'}>Comment</span>
+                  <span className={"hidden md:block"}>Comment</span>
                 </Button>
 
                 <Button variant="ghost" className="flex-1">
@@ -106,7 +111,10 @@ export default function ForumPost(props) {
 
               <div className="comments-section">
                 {comments.map((comment, index) => (
-                  <div key={index} className="flex gap-3 items-center mb-2 bg-slate-100 p-3 rounded-lg">
+                  <div
+                    key={index}
+                    className="flex gap-3 items-center mb-2 bg-slate-100 p-3 rounded-lg"
+                  >
                     <Avatar>
                       <AvatarImage src="https://i.pravatar.cc/150" />
                       <AvatarFallback>{comment.name[0]}</AvatarFallback>
@@ -166,7 +174,7 @@ export default function ForumPost(props) {
 
         <Button variant="ghost" className="flex-1">
           <ExternalLink />
-          <span className={'hidden md:block'}>Share</span>
+          <span className={"hidden md:block"}>Share</span>
         </Button>
       </div>
 
