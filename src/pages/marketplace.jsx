@@ -25,52 +25,60 @@ export default function Marketplace() {
 
   return (
     <div className={"flex w-full items-center p-1 md:p-5 gap-3 md:gap-5 flex-wrap justify-center"}>
-      <div className={"w-full min-h-[120px] border rounded-2xl p-5 text-xl flex flex-col items-start"}>
-        Punya Barang yang Ingin Dijual?
-        <Dialog>
-          <DialogTrigger>
-            <Button className={"mt-3"}> <Plus />Tambahkan Produk</Button>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle>Mau menambahkan apa?</DialogTitle>
-              <DialogDescription>
-                <div className="grid w-full items-center gap-1.5 mt-3">
-                  <Label htmlFor="input-produk">Nama Produk</Label>
-                  <Input type="text" id="input-produk" placeholder="Ex: Pupuk Organik"/>
-                </div>
+      <div className={"w-full min-h-[120px] border rounded-2xl py-5 px-5 xl:px-48 text-xl flex justify-between items-center"}>
+        <div className={'flex flex-col items-start'}>
+          <span className={'font-bold text-4xl'}>Punya Barang yang Ingin Dijual?</span>
+          <Dialog>
+            <DialogTrigger>
+              <Button className={"mt-3"}> <Plus/>Tambahkan Produk</Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Mau menambahkan apa?</DialogTitle>
+                <DialogDescription>
+                  <div className="grid w-full items-center gap-1.5 mt-3">
+                    <Label htmlFor="input-produk">Nama Produk</Label>
+                    <Input type="text" id="input-produk" placeholder="Ex: Pupuk Organik"/>
+                  </div>
 
-                <div className="grid w-full items-center gap-1.5 mt-3">
-                  <Label htmlFor="input-foto-produk">Foto Produk</Label>
-                  <Input id="input-foto-produk" type="file"/>
-                </div>
+                  <div className="grid w-full items-center gap-1.5 mt-3">
+                    <Label htmlFor="input-foto-produk">Foto Produk</Label>
+                    <Input id="input-foto-produk" type="file"/>
+                  </div>
 
-                <div className="grid w-full gap-1.5 mt-3">
-                  <Label htmlFor="input-deskripsi">Deskripsi Produk</Label>
-                  <Textarea placeholder="Ex: Pupuk Organik merupakan pupuk yang dapat menyuburkan tanaman"
-                            id="input-deskripsi"/>
-                </div>
+                  <div className="grid w-full gap-1.5 mt-3">
+                    <Label htmlFor="input-deskripsi">Deskripsi Produk</Label>
+                    <Textarea placeholder="Ex: Pupuk Organik merupakan pupuk yang dapat menyuburkan tanaman"
+                              id="input-deskripsi"/>
+                  </div>
 
-                <div className="grid w-full items-center gap-1.5 mt-3">
-                  <Label htmlFor="input-harga">Harga Produk (Rp)</Label>
-                  <Input min={0} type="number" id="input-harga" placeholder="Ex: 10000"/>
-                </div>
+                  <div className="grid w-full items-center gap-1.5 mt-3">
+                    <Label htmlFor="input-harga">Harga Produk (Rp)</Label>
+                    <Input min={0} type="number" id="input-harga" placeholder="Ex: 10000"/>
+                  </div>
 
-                <div className="grid w-full items-center gap-1.5 mt-3">
-                  <Label htmlFor="input-lokasi">Lokasi</Label>
-                  <Input type="text" id="input-lokasi" placeholder="Ex: Kota Medan"/>
-                </div>
+                  <div className="grid w-full items-center gap-1.5 mt-3">
+                    <Label htmlFor="input-lokasi">Lokasi</Label>
+                    <Input type="text" id="input-lokasi" placeholder="Ex: Kota Medan"/>
+                  </div>
 
-                <div className="grid w-full items-center gap-1.5 mt-3">
-                  <Label htmlFor="input-nomor">Nomor WhatsApp</Label>
-                  <Input type="text" id="input-nomor" placeholder="Ex: 0823456789"/>
-                </div>
+                  <div className="grid w-full items-center gap-1.5 mt-3">
+                    <Label htmlFor="input-nomor">Nomor WhatsApp</Label>
+                    <Input type="text" id="input-nomor" placeholder="Ex: 0823456789"/>
+                  </div>
 
-                <Button className={"mt-3"}>Submit</Button>
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+                  <Button className={"mt-3"}>Submit</Button>
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        <img
+            className={"w-72 md"}
+            src={"src/assets/marketplace/asset1.jpg"}
+            alt={"logo"}
+        />
       </div>
 
       {dataMarketplace.map((item, index) => (
