@@ -22,7 +22,8 @@ export default function LoginPage() {
                 password: password
             });
 
-            localStorage.setItem('token', response.data.token)
+            localStorage.setItem('token', response.data.data.token)
+            localStorage.setItem('username', username)
             navigate("/")
         } catch (error) {
             toast({

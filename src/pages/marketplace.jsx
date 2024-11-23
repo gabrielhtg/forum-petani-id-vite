@@ -1,7 +1,6 @@
 import { Card } from "@/components/ui/card.jsx";
 import { Button } from "@/components/ui/button.jsx";
 import { Phone, MapPin, Plus } from "lucide-react";
-import {dataMarketplace} from "@/data/data-marketplace.js";
 import {Truncate} from "@re-dev/react-truncate";
 import {useNavigate} from "react-router-dom";
 import {
@@ -15,12 +14,75 @@ import {
 import {Input} from "@/components/ui/input.jsx";
 import {Label} from "@/components/ui/label.jsx";
 import {Textarea} from "@/components/ui/textarea.jsx";
+import axios from "axios";
+import {apiUrl} from "@/env.js";
+import {useToast} from "@/hooks/use-toast.js";
+import {Toaster} from "@/components/ui/toaster.jsx";
+import {useEffect, useState} from "react";
+import {formatRupiah} from "@/services/format-rupiah.js";
 
 export default function Marketplace() {
-  const navigate = useNavigate(); // Gunakan useNavigate untuk navigasi
+  const navigate = useNavigate();
+  const {toast} = useToast();
+  const [nama, setNama] = useState('');
+  const [picture, setPicture] = useState(null);
+  const [description, setDescription] = useState('');
+  const [harga, setHarga] = useState('');
+  const [lokasi, setLokasi] = useState('');
+  const [whatsappNumber, setWhatsappNumber] = useState('');
+  const [products, setProducts] = useState([]);
 
   const handleCardClick = (id) => {
-    navigate(`/marketplace/${id}`); // Gunakan navigate untuk berpindah halaman
+    navigate(`/marketplace/${id}`);
+  };
+
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get('http://localhost:3000/api/products', {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        setProducts(response.data.data);
+      } catch (err) {
+        console.log(err)
+      }
+    };
+
+    fetchProducts().then();
+  }, []);
+
+  const handleCreateProduct = async () => {
+    console.log(picture)
+    const formData = new FormData();
+    formData.append('nama', nama)
+    formData.append('picture', picture)
+    formData.append('description', description)
+    formData.append('harga', harga)
+    formData.append('lokasi', lokasi)
+    formData.append('whatsapp_number', whatsappNumber)
+    formData.append('uploader_id', localStorage.getItem('username'))
+
+    try {
+      const response = await axios.post(`${apiUrl}/api/products`, formData, {
+        headers: {
+          'Authorization': `Bearer ${localStorage.getItem('token')}`,
+        },
+      });
+
+      toast({
+        title: "Success",
+        description: response.data.data,
+      })
+    } catch (error) {
+      console.log(error)
+      toast({
+        variant: "destructive",
+        title: "Oppps...",
+        description: error.response.data.message,
+      })
+    }
   };
 
   return (
@@ -29,45 +91,60 @@ export default function Marketplace() {
         <div className={'flex flex-col items-start'}>
           <span className={'font-bold text-4xl'}>Punya Barang yang Ingin Dijual?</span>
           <Dialog>
-            <DialogTrigger>
-              <Button className={"mt-3"}> <Plus/>Tambahkan Produk</Button>
-            </DialogTrigger>
+            <Button className={"mt-3"} asChild={true}>
+              <DialogTrigger>
+                <Plus/>Tambahkan Produk
+              </DialogTrigger>
+            </Button>
+
             <DialogContent>
               <DialogHeader>
                 <DialogTitle>Mau menambahkan apa?</DialogTitle>
-                <DialogDescription>
+                <DialogDescription className={'text-black!'}>
                   <div className="grid w-full items-center gap-1.5 mt-3">
                     <Label htmlFor="input-produk">Nama Produk</Label>
-                    <Input type="text" id="input-produk" placeholder="Ex: Pupuk Organik"/>
+                    <Input onChange={(e) => {
+                      setNama(e.target.value)
+                    }} type="text" id="input-produk" placeholder="Ex: Pupuk Organik"/>
                   </div>
 
                   <div className="grid w-full items-center gap-1.5 mt-3">
                     <Label htmlFor="input-foto-produk">Foto Produk</Label>
-                    <Input id="input-foto-produk" type="file"/>
+                    <Input onChange={(e) => {
+                      setPicture(e.target.files[0])
+                    }}  id="input-foto-produk" type="file"/>
                   </div>
 
                   <div className="grid w-full gap-1.5 mt-3">
                     <Label htmlFor="input-deskripsi">Deskripsi Produk</Label>
-                    <Textarea placeholder="Ex: Pupuk Organik merupakan pupuk yang dapat menyuburkan tanaman"
+                    <Textarea max={1000} onChange={(e) => {
+                      setDescription(e.target.value)
+                    }} placeholder="Ex: Pupuk Organik merupakan pupuk yang dapat menyuburkan tanaman"
                               id="input-deskripsi"/>
                   </div>
 
                   <div className="grid w-full items-center gap-1.5 mt-3">
                     <Label htmlFor="input-harga">Harga Produk (Rp)</Label>
-                    <Input min={0} type="number" id="input-harga" placeholder="Ex: 10000"/>
+                    <Input onChange={(e) => {
+                      setHarga(e.target.value)
+                    }} min={0} type="number" id="input-harga" placeholder="Ex: 10000"/>
                   </div>
 
                   <div className="grid w-full items-center gap-1.5 mt-3">
                     <Label htmlFor="input-lokasi">Lokasi</Label>
-                    <Input type="text" id="input-lokasi" placeholder="Ex: Kota Medan"/>
+                    <Input onChange={(e) => {
+                      setLokasi(e.target.value)
+                    }} type="text" id="input-lokasi" placeholder="Ex: Kota Medan"/>
                   </div>
 
                   <div className="grid w-full items-center gap-1.5 mt-3">
                     <Label htmlFor="input-nomor">Nomor WhatsApp</Label>
-                    <Input type="text" id="input-nomor" placeholder="Ex: 0823456789"/>
+                    <Input onChange={(e) => {
+                      setWhatsappNumber(e.target.value)
+                    }} type="text" id="input-nomor" placeholder="Ex: 0823456789"/>
                   </div>
 
-                  <Button className={"mt-3"}>Submit</Button>
+                  <Button className={"mt-3"} onClick={handleCreateProduct}>Submit</Button>
                 </DialogDescription>
               </DialogHeader>
             </DialogContent>
@@ -81,7 +158,7 @@ export default function Marketplace() {
         />
       </div>
 
-      {dataMarketplace.map((item, index) => (
+      {products.map((item, index) => (
           <Card
               key={index}
               className={
@@ -92,7 +169,7 @@ export default function Marketplace() {
           <div>
             <img
               className={"w-full"}
-              src={item.gambar}
+              src={`${apiUrl}/${item.picture}`}
               alt={"petani"}
               width={500}
               height={500}
@@ -102,7 +179,7 @@ export default function Marketplace() {
 
           <div className={'flex flex-col'}>
             <Truncate
-                lines={2}
+                lines={1}
                 ellipsis={
                   <span>...</span>
                 }
@@ -110,23 +187,24 @@ export default function Marketplace() {
                   console.log(didTruncate)
                 }}
             >
-              <span className={"text-gray-500 font-extralight"}> {item.nama_produk}</span>
+              <span className={"text-gray-500 font-extralight"}> {item.nama}</span>
             </Truncate>
-            <span className={"font-bold text-sm"}>{item.harga}</span>
+            <span className={"font-bold text-sm"}>{`${formatRupiah(item.harga)},-`}</span>
           </div>
 
           <div>
-            <Button className={"text-xs flex gap-1"}>
-              <Phone size={6}/> Chat <span className={"hidden md:flex"}>Penjual</span>
-            </Button>
+            {/*<Button className={"text-xs flex gap-1"}>*/}
+            {/*  <Phone size={6}/> Chat <span className={"hidden md:flex"}>Penjual</span>*/}
+            {/*</Button>*/}
             <span
-              className={"text-gray-500 text-sm flex mt-3 items-center gap-1"}
+              className={"text-gray-500 text-sm flex items-center gap-1"}
             >
               <MapPin size={16} /> {item.lokasi}
             </span>
           </div>
         </Card>
       ))}
+      <Toaster/>
     </div>
   );
 }

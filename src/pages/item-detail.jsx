@@ -1,15 +1,35 @@
-import { useParams } from "react-router-dom";
-import { dataMarketplace } from "@/data/data-marketplace.js";
-import { Button } from "@/components/ui/button.jsx";
-import { Phone } from "lucide-react";
+import {useParams} from "react-router-dom";
+import {Button} from "@/components/ui/button.jsx";
+import {Phone} from "lucide-react";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {apiUrl} from "@/env.js";
 
 export default function ItemDetail() {
   const { id } = useParams();
-  const item = dataMarketplace.find((item) => item.id === parseInt(id));
+  // const item = dataMarketplace.find((item) => item.id === parseInt(id));
+  const [product, setProduct] = useState(null);
 
-  if (!item) return <p>Item tidak ditemukan</p>;
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const response = await axios.get(`http://localhost:3000/api/products/${id}`, {
+          headers: {
+            'Authorization': `Bearer ${localStorage.getItem('token')}`,
+          },
+        });
+        setProduct(response.data.data[0]);
+      } catch (err) {
+        console.log(err)
+      }
+    };
 
-  const { gambar, nama_produk, harga, nama_toko, lokasi } = item;
+    fetchProducts().then();
+  }, [])
+
+  if (!product) return <p>Item tidak ditemukan</p>;
+
+  const { nama, picture, description, harga, lokasi, whatsapp_number, uploader_id } = product;
 
   // Pesan template yang akan muncul di WhatsApp
   const templateMessage =
@@ -18,8 +38,7 @@ export default function ItemDetail() {
 
 
   const handleChatClick = () => {
-    const waNumber = "6281264856003"; 
-    const waLink = `https://wa.me/${waNumber}?text=${encodedMessage}`;
+    const waLink = `https://wa.me/${whatsapp_number}?text=${encodedMessage}`;
     window.open(waLink, "_blank"); 
   };
 
@@ -29,8 +48,8 @@ export default function ItemDetail() {
   
         <div className="w-full md:w-1/2 p-4 md:p-8">
           <img
-            src={gambar}
-            alt={nama_produk}
+            src={`${apiUrl}/${picture}`}
+            alt={nama}
             className="w-full h-auto rounded-md object-cover"
           />
         </div>
@@ -39,7 +58,7 @@ export default function ItemDetail() {
         <div className="w-full md:w-1/2 p-4 md:p-8 flex flex-col gap-4 justify-center">
   
           <h2 className="text-xl md:text-2xl font-semibold text-gray-800">
-            {nama_produk}
+            {nama}
           </h2>
 
    
@@ -49,7 +68,7 @@ export default function ItemDetail() {
           <div className="text-gray-500 text-sm md:text-base mt-2">
             <p>
               Dijual oleh:{" "}
-              <span className="font-medium text-gray-800">{nama_toko}</span>
+              <span className="font-medium text-gray-800">{uploader_id}</span>
             </p>
             <p>
               Lokasi:{" "}
@@ -59,10 +78,7 @@ export default function ItemDetail() {
 
         
           <p className="text-gray-600 mt-4 leading-relaxed text-sm md:text-base">
-            Deskripsi: Produk ini merupakan {nama_produk.toLowerCase()} yang
-            diproduksi dengan kualitas terbaik, sesuai untuk berbagai jenis
-            tanaman dan lingkungan perkebunan. Dapatkan produk ini dari toko{" "}
-            {nama_toko} yang berlokasi di {lokasi}.
+            {description}
           </p>
 
           <div className="flex flex-col sm:flex-row gap-4 mt-6">
