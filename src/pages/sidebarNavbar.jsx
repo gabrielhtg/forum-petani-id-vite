@@ -1,9 +1,34 @@
 import {SidebarInset, SidebarProvider, SidebarTrigger} from "@/components/ui/sidebar.jsx";
 import {AppSidebar} from "@/components/app-sidebar.jsx";
-import {Link, Outlet} from "react-router-dom";
+import {Link, Outlet, useNavigate} from "react-router-dom";
 import {Button} from "@/components/ui/button.jsx";
+import {useEffect, useState} from "react";
+import axios from "axios";
+import {apiUrl} from "@/env.js";
 
 export default function SidebarNavbar() {
+    const navigate = useNavigate()
+    const [isLoggedIn, setIsLoggedIn] = useState(false)
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const response = await axios.get(`${apiUrl}/api/auth/check`, {
+                    headers: {
+                        Authorization: `Bearer ${localStorage.getItem('token')}`,
+                    }
+                })
+
+                console.log(response)
+                // eslint-disable-next-line no-unused-vars
+            } catch (err) {
+                // do nothin
+            }
+        }
+
+        fetchUserData().then()
+    })
+
     return (
         <SidebarProvider>
             <AppSidebar/>

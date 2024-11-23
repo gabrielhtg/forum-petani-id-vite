@@ -39,7 +39,7 @@ export default function Marketplace() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://localhost:3000/api/products', {
+        const response = await axios.get(`${apiUrl}/api/products`, {
           headers: {
             'Authorization': `Bearer ${localStorage.getItem('token')}`,
           },
