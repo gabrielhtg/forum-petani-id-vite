@@ -9,6 +9,7 @@ import { Button } from "@/components/ui/button.jsx";
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { apiUrl } from "@/env.js";
+import { LogOut, User, ShoppingBasket, PanelTop } from "lucide-react";
 import {
   Avatar,
   AvatarFallback,
@@ -28,6 +29,11 @@ export default function SidebarNavbar() {
   const [isUsernameExist, setIsUsernameExist] = useState(
     localStorage.getItem("username"),
   );
+
+  const handleLogout = () => {
+    localStorage.clear();
+    setIsUsernameExist(localStorage.getItem("username"));
+  };
 
   // useEffect(() => {
   //     const fetchUserData = async () => {
@@ -78,11 +84,20 @@ export default function SidebarNavbar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent className={"mr-3"}>
                 <DropdownMenuItem asChild={true}>
-                  <Link to={"/profile"}>Profil</Link>
+                  <Link to={"/profile"}>
+                    {" "}
+                    <User /> Profil
+                  </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>Produk Anda</DropdownMenuItem>
-                <DropdownMenuItem>Post Anda</DropdownMenuItem>
                 <DropdownMenuItem>
+                  {" "}
+                  <ShoppingBasket /> Produk Anda
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                  {" "}
+                  <PanelTop /> Post Anda
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={handleLogout}>
                   <LogOut /> Keluar
                 </DropdownMenuItem>
               </DropdownMenuContent>
