@@ -23,15 +23,19 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.jsx";
+import { useDispatch } from "react-redux";
+import { notLoggedIn } from "@/services/isLoginSlice.js";
 
 export default function SidebarNavbar() {
   const navigate = useNavigate();
   const [isUsernameExist, setIsUsernameExist] = useState(
     localStorage.getItem("username"),
   );
+  const dispatch = useDispatch();
 
   const handleLogout = () => {
     localStorage.clear();
+    dispatch(notLoggedIn());
     setIsUsernameExist(localStorage.getItem("username"));
   };
 
