@@ -5,21 +5,22 @@ import {Button} from "@/components/ui/button.jsx";
 import {useEffect, useState} from "react";
 import axios from "axios";
 import {apiUrl} from "@/env.js";
+import {Avatar, AvatarFallback, AvatarImage} from "@/components/ui/avatar.jsx";
 
 export default function SidebarNavbar() {
     const navigate = useNavigate()
-    const [isLoggedIn, setIsLoggedIn] = useState(false)
+    const [userData, setUserData] = useState(null)
 
     useEffect(() => {
         const fetchUserData = async () => {
             try {
-                const response = await axios.get(`${apiUrl}/api/auth/check`, {
+                const response = await axios.get(`${apiUrl}/api/users`, {
                     headers: {
                         Authorization: `Bearer ${localStorage.getItem('token')}`,
                     }
                 })
 
-                console.log(response)
+                setUserData(response.data.data[0])
                 // eslint-disable-next-line no-unused-vars
             } catch (err) {
                 // do nothin
@@ -49,13 +50,21 @@ export default function SidebarNavbar() {
                     {/*        </BreadcrumbItem>*/}
                     {/*    </BreadcrumbList>*/}
                     {/*</Breadcrumb>*/}
-                    <div>
-                        <Button asChild={true}>
-                            <Link to={'/login'}>
-                                Login
-                            </Link>
-                        </Button>
-                    </div>
+                    {userData ? (
+                        <Avatar>
+                            <AvatarImage src="https://github.com/shadcn.png" />
+                            <AvatarFallback>CN</AvatarFallback>
+                        </Avatar>
+                    ) : (
+                        <div>
+                            <Button asChild={true}>
+                                <Link to={'/login'}>
+                                    Login
+                                </Link>
+                            </Button>
+                        </div>
+                    )}
+
                 </header>
                 <div className="flex flex-1 flex-col gap-4 p-4">
                     <Outlet/>
