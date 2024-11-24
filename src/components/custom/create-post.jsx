@@ -1,5 +1,4 @@
-/* eslint-disable react/prop-types */
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
 import { Input } from "@/components/ui/input";
@@ -11,29 +10,97 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { SendHorizontal } from "lucide-react";
+import { SendHorizontal, Trash2 } from "lucide-react";
+import axios from "axios";
+import { apiUrl } from "@/env.js";
 
-export default function CreatePost({ data }) {
+export default function CreatePost() {
   const [images, setImages] = useState([]);
+  const [error, setError] = useState("");
+  const [caption, setCaption] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
 
-  const onDrop = (acceptedFiles) => {
-    const newImages = acceptedFiles.map((file) =>
-      Object.assign(file, {
-        preview: URL.createObjectURL(file),
-      }),
+  const onDrop = useCallback((acceptedFiles) => {
+    const validFiles = acceptedFiles.filter((file) => {
+      if (!file.type.startsWith("image/")) {
+        setError("Hanya file gambar yang diperbolehkan.");
+        return false;
+      }
+      if (file.size > 3 * 1024 * 1024) {
+        // 2MB
+        setError("Ukuran file maksimal 2MB.");
+        return false;
+      }
+      return true;
+    });
+
+    // Reset error jika tidak ada masalah
+    if (validFiles.length > 0) {
+      setError("");
+      setImages((prevImages) => [...prevImages, ...validFiles]);
+    }
+  }, []);
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
+
+  const removeFile = (fileToRemove) => {
+    setImages((prevImages) =>
+      prevImages.filter((file) => file.path !== fileToRemove.path),
     );
-    setImages((prev) => [...prev, ...newImages]);
   };
 
-  const { getRootProps, getInputProps } = useDropzone({
-    onDrop,
-    accept: "image/*",
-    multiple: true,
+  const handleUpload = async () => {
+    if (images.length === 0) {
+      setError("Harap pilih setidaknya satu gambar.");
+      return;
+    }
+
+    const formData = new FormData();
+    images.forEach((image) => {
+      formData.append("files", image); // Nama field sesuai dengan backend
+    });
+
+    formData.append("caption", caption);
+    formData.append("username", localStorage.getItem("username"));
+
+    try {
+      setIsUploading(true);
+      setError("");
+
+      const response = await axios.post(`${apiUrl}/api/posts`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      console.log("File uploaded successfully:", response.data);
+      alert("File berhasil diunggah!");
+      setImages([]);
+    } catch (error) {
+      console.error("Error uploading file:", error);
+      setError("Gagal mengunggah file. Coba lagi.");
+    } finally {
+      setIsUploading(false);
+    }
+  };
+
+  const files = images.map((file) => {
+    const fileSizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+    return (
+      <li
+        key={file.path}
+        className="flex p-3 border rounded-lg justify-between items-center"
+      >
+        <span>
+          {file.name} - {fileSizeInMB} MB
+        </span>
+        <Button variant="destructive" onClick={() => removeFile(file)}>
+          <Trash2 />
+        </Button>
+      </li>
+    );
   });
-
-  const handleRemoveImage = (index) => {
-    setImages((prev) => prev.filter((_, i) => i !== index));
-  };
 
   return (
     <div
@@ -43,71 +110,53 @@ export default function CreatePost({ data }) {
       <h3 className="font-bold text-lg">Buat Postingan Baru</h3>
       <div className="flex gap-3 items-center">
         <Avatar>
-          <AvatarImage src={data.avatar} />
-          <AvatarFallback>{data.user_initial}</AvatarFallback>
+          <AvatarImage src={"https://github.com/shadcn.png"} />
+          <AvatarFallback>TN</AvatarFallback>
         </Avatar>
         <Dialog>
           <DialogTrigger asChild>
             <Input
               type="text"
-              placeholder={`Apa yang Anda pikirkan, ${data.name}?`}
+              placeholder={`Apa yang Anda pikirkan, ${localStorage.getItem("name")}?`}
               className="cursor-pointer"
             />
           </DialogTrigger>
 
-          <DialogContent className="sm:max-w-2xl">
+          <DialogContent className="sm:max-w-2xl max-h-[calc(100vh-165px)] overflow-y-scroll">
             <DialogHeader>
               <DialogTitle>Buat Postingan Baru</DialogTitle>
             </DialogHeader>
             <div className="flex flex-col gap-4 mt-4">
-              {/* Input Teks */}
               <textarea
+                onChange={(e) => {
+                  setCaption(e.target.value);
+                }}
                 className="border rounded-lg p-3 w-full text-sm focus:outline-none focus:ring focus:ring-blue-200"
                 placeholder="Tulis sesuatu di sini..."
                 rows="5"
               ></textarea>
 
-              {/* Area Drag & Drop */}
-              <div
-                {...getRootProps()}
-                className="border-dashed border-2 border-gray-300 p-4 rounded-lg text-center cursor-pointer"
-              >
-                <input {...getInputProps()} />
-                <p>Drag & drop gambar di sini, atau klik untuk memilih</p>
-              </div>
-
-              {/* Area Gambar */}
-              {images.length > 0 && (
+              <section className="container">
                 <div
-                  className="grid grid-cols-3 gap-3 mt-4 p-2 border rounded-lg overflow-y-auto"
-                  style={{ maxHeight: "200px" }}
+                  {...getRootProps({ className: "dropzone" })}
+                  className="border-2 border-dashed p-10 flex justify-center rounded-lg"
                 >
-                  {images.map((image, index) => (
-                    <div
-                      key={image.preview}
-                      className="relative w-full h-36 border rounded overflow-hidden group"
-                    >
-                      <img
-                        src={image.preview}
-                        alt="Preview"
-                        className="w-full h-full object-cover"
-                      />
-                      <button
-                        onClick={() => handleRemoveImage(index)}
-                        className="absolute top-2 right-2 bg-red-500 text-white text-xs rounded-full p-1 opacity-80 hover:opacity-100 focus:ring-2 focus:ring-red-300"
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  ))}
+                  <input {...getInputProps()} />
+                  <p>Geser gambar anda ke sini!</p>
                 </div>
-              )}
+                {error && (
+                  <p className="text-red-500 mt-2">{error}</p> // Menampilkan pesan error
+                )}
+                <aside className="mt-3">
+                  <h4 className="font-bold">Files</h4>
+                  <ul className="mt-3 flex flex-col gap-3">{files}</ul>
+                </aside>
+              </section>
 
-              {/* Tombol Posting */}
               <div className="flex justify-end items-center mt-4">
-                <Button>
+                <Button onClick={handleUpload}>
                   <SendHorizontal className="mr-2" />
-                  Posting
+                  Post
                 </Button>
               </div>
             </div>

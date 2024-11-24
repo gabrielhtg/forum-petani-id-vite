@@ -35,7 +35,7 @@ export default function LoginPage() {
 
       localStorage.setItem("token", response.data.data.token);
       localStorage.setItem("username", username);
-      console.log(isLogin);
+      localStorage.setItem("name", response.data.data.name);
       dispatch(loggedIn());
       navigate("/");
     } catch (error) {
