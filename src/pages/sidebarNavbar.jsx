@@ -25,9 +25,11 @@ import {
 } from "@/components/ui/dropdown-menu.jsx";
 import { useDispatch } from "react-redux";
 import { notLoggedIn } from "@/services/isLoginSlice.js";
+import { getUserInitials } from "@/services/getUserInitials.js";
 
 export default function SidebarNavbar() {
   const navigate = useNavigate();
+  const userData = JSON.parse(localStorage.getItem("userData"));
   const [isUsernameExist, setIsUsernameExist] = useState(
     localStorage.getItem("username"),
   );
@@ -82,8 +84,10 @@ export default function SidebarNavbar() {
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Avatar>
-                  <AvatarImage src="https://github.com/shadcn.png" />
-                  <AvatarFallback>CN</AvatarFallback>
+                  <AvatarImage src={`${apiUrl}/${userData.profile_pict}`} />
+                  <AvatarFallback>
+                    {getUserInitials(userData.name)}
+                  </AvatarFallback>
                 </Avatar>
               </DropdownMenuTrigger>
               <DropdownMenuContent className={"mr-3"}>

@@ -25,17 +25,31 @@ export default function LoginPage() {
   const isLogin = useSelector((state) => state.isLogin.value);
   const dispatch = useDispatch();
 
-  // Fungsi handle login
   const handleLogin = async () => {
     try {
-      const response = await axios.post(`${apiUrl}/api/auth/login`, {
+      const responseLogin = await axios.post(`${apiUrl}/api/auth/login`, {
         username: username,
         password: password,
       });
 
-      localStorage.setItem("token", response.data.data.token);
+      localStorage.setItem("token", responseLogin.data.data.token);
       localStorage.setItem("username", username);
-      localStorage.setItem("name", response.data.data.name);
+      localStorage.setItem("name", responseLogin.data.data.name);
+
+      const responseGetUser = await axios.get(
+        `${apiUrl}/api/users/${username}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+
+      localStorage.setItem(
+        "userData",
+        JSON.stringify(responseGetUser.data.data[0]),
+      );
+
       dispatch(loggedIn());
       navigate("/");
     } catch (error) {

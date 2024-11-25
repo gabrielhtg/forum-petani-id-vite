@@ -18,37 +18,40 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Link } from "react-router-dom";
+import { apiUrl } from "@/env.js";
+import { getUserInitials } from "@/services/getUserInitials.js";
+import { formatPostDate } from "@/services/formatPostDate.js";
 
 export default function ForumPost(props) {
   const data = props.props;
-  const comments = data.comments;
-  const likes = data.likes;
+  const userData = JSON.parse(localStorage.getItem("userData"));
 
   return (
     <div className="flex flex-col border shadow-sm max-w-2xl rounded-lg p-5 gap-5">
-      {/* Postingan yang ada */}
       <div id="post-header" className="flex gap-3 items-center">
         <Avatar>
-          <AvatarImage src={data.avatar} />
-          <AvatarFallback>{data.user_initial}</AvatarFallback>
+          <AvatarImage src={`${apiUrl}/${userData.profile_pict}`} />
+          <AvatarFallback>{getUserInitials(userData.name)}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
-          <span className="font-bold">{data.name}</span>
-          <span className="text-slate-500">{data.post_date}</span>
+          <span className="font-bold">{userData.name}</span>
+          <span className="text-slate-500">
+            {formatPostDate(data.updated_at)}
+          </span>
         </div>
       </div>
 
       <div id="post-content" className="flex flex-col gap-2">
         <div>
-          <p>{data.post_content}</p>
+          <p>{data.caption}</p>
         </div>
-        <img src={data.content_image} alt="post-image" loading={"lazy"} />
+        {/*<img src={data.content_image} alt="post-image" loading={"lazy"} />*/}
       </div>
 
       <div id="post-reaction" className="flex w-full justify-evenly">
         <Button variant="ghost" className="flex-1">
           <span className="flex items-center gap-1">
-            <ThumbsUp /> {likes}
+            <ThumbsUp /> {10}
           </span>
           <span className={"hidden md:block"}>Like</span>
         </Button>
@@ -57,7 +60,7 @@ export default function ForumPost(props) {
           <DialogTrigger asChild>
             <Button variant="ghost" className="flex-1">
               <span className="flex items-center gap-1">
-                <MessageCircle /> {comments.length}
+                <MessageCircle /> {10}
               </span>
               <span className={"hidden md:block"}>Comment</span>
             </Button>
@@ -66,37 +69,41 @@ export default function ForumPost(props) {
             <div className="flex flex-col max-w-2xl gap-5">
               <div id="post-header" className="flex gap-3 items-center">
                 <Avatar>
-                  <AvatarImage src={data.avatar} />
-                  <AvatarFallback>{data.user_initial}</AvatarFallback>
+                  <AvatarImage src={`${apiUrl}/${userData.profile_pict}`} />
+                  <AvatarFallback>
+                    {getUserInitials(userData.name)}
+                  </AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                  <span className="font-bold">{data.name}</span>
-                  <span className="text-slate-500">{data.post_date}</span>
+                  <span className="font-bold">{userData.name}</span>
+                  <span className="text-slate-500">
+                    {formatPostDate(data.updated_at)}
+                  </span>
                 </div>
               </div>
 
               <div id="post-content" className="flex flex-col gap-2">
                 <div>
-                  <p>{data.post_content}</p>
+                  <p>{data.caption}</p>
                 </div>
-                <img
-                  src={data.content_image}
-                  alt="post-image"
-                  loading={"lazy"}
-                />
+                {/*<img*/}
+                {/*  src={data.content_image}*/}
+                {/*  alt="post-image"*/}
+                {/*  loading={"lazy"}*/}
+                {/*/>*/}
               </div>
 
               <div id="post-reaction" className="flex w-full justify-evenly">
                 <Button variant="ghost" className="flex-1">
                   <span className="flex items-center gap-1">
-                    <ThumbsUp fill="blue" /> {likes}
+                    <ThumbsUp fill="blue" /> {10}
                   </span>
                   <span className={"hidden md:block"}>Like</span>
                 </Button>
 
                 <Button variant="ghost" className="flex-1">
                   <span className="flex items-center gap-1">
-                    <MessageCircle /> {comments.length}
+                    <MessageCircle /> {10}
                   </span>
                   <span className={"hidden md:block"}>Comment</span>
                 </Button>
@@ -109,29 +116,31 @@ export default function ForumPost(props) {
 
               <hr />
 
-              <div className="comments-section">
-                {comments.map((comment, index) => (
-                  <div
-                    key={index}
-                    className="flex gap-3 items-center mb-2 bg-slate-100 p-3 rounded-lg"
-                  >
-                    <Avatar>
-                      <AvatarImage src="https://i.pravatar.cc/150" />
-                      <AvatarFallback>{comment.name[0]}</AvatarFallback>
-                    </Avatar>
-                    <div className="comment-content">
-                      <span className="font-bold">{comment.name}</span>
-                      <p>{comment.content}</p>
-                      <span className="text-slate-500">{comment.date}</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
+              {/*<div className="comments-section">*/}
+              {/*  {comments.map((comment, index) => (*/}
+              {/*    <div*/}
+              {/*      key={index}*/}
+              {/*      className="flex gap-3 items-center mb-2 bg-slate-100 p-3 rounded-lg"*/}
+              {/*    >*/}
+              {/*      <Avatar>*/}
+              {/*        <AvatarImage src="https://i.pravatar.cc/150" />*/}
+              {/*        <AvatarFallback>{comment.name[0]}</AvatarFallback>*/}
+              {/*      </Avatar>*/}
+              {/*      <div className="comment-content">*/}
+              {/*        <span className="font-bold">{comment.name}</span>*/}
+              {/*        <p>{comment.content}</p>*/}
+              {/*        <span className="text-slate-500">{comment.date}</span>*/}
+              {/*      </div>*/}
+              {/*    </div>*/}
+              {/*  ))}*/}
+              {/*</div>*/}
 
               <div className="flex gap-3 items-center">
                 <Avatar>
-                  <AvatarImage src={data.avatar} />
-                  <AvatarFallback>{data.user_initial}</AvatarFallback>
+                  <AvatarImage src={`${apiUrl}/${userData.profile_pict}`} />
+                  <AvatarFallback>
+                    {getUserInitials(userData.name)}
+                  </AvatarFallback>
                 </Avatar>
                 <Input type="text" placeholder="Tulis disini..." />
                 <Dialog>
@@ -183,7 +192,7 @@ export default function ForumPost(props) {
       <div className="flex gap-3 items-center">
         <Avatar>
           <AvatarImage src={data.avatar} />
-          <AvatarFallback>{data.user_initial}</AvatarFallback>
+          <AvatarFallback>{getUserInitials(userData.name)}</AvatarFallback>
         </Avatar>
         <Input type="text" placeholder="Tulis disini..." />
         <Dialog>
