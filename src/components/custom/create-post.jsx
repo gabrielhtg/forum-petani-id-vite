@@ -15,14 +15,13 @@ import axios from "axios";
 import { apiUrl } from "@/env.js";
 import { getUserInitials } from "@/services/getUserInitials.js";
 import { setPosts } from "@/services/postsSlice.js";
-import { useDispatch, useSelector } from "react-redux";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 
 export default function CreatePost() {
   const [images, setImages] = useState([]);
   const [error, setError] = useState("");
   const [caption, setCaption] = useState("");
-  const [isUploading, setIsUploading] = useState(false);
   const userData = JSON.parse(localStorage.getItem("userData"));
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -34,6 +33,19 @@ export default function CreatePost() {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
+
+      for (const e of response.data.data) {
+        const postImageResponse = await axios.get(
+          `${apiUrl}/api/posts/pictures/${e.post_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          },
+        );
+
+        e.images = postImageResponse.data.data;
+      }
 
       dispatch(setPosts(response.data.data));
     } catch (err) {
@@ -87,25 +99,21 @@ export default function CreatePost() {
     formData.append("username", localStorage.getItem("username"));
 
     try {
-      setIsUploading(true);
       setError("");
 
-      const response = await axios.post(`${apiUrl}/api/posts`, formData, {
+      await axios.post(`${apiUrl}/api/posts`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
-      console.log("File uploaded successfully:", response.data);
       alert("File berhasil diunggah!");
       fetchPosts().then();
       setImages([]);
     } catch (error) {
       console.error("Error uploading file:", error);
       setError("Gagal mengunggah file. Coba lagi.");
-    } finally {
-      setIsUploading(false);
     }
   };
 
