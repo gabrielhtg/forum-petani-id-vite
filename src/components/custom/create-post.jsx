@@ -16,7 +16,9 @@ import { apiUrl } from "@/env.js";
 import { getUserInitials } from "@/services/getUserInitials.js";
 import { setPosts } from "@/services/postsSlice.js";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { ToastAction } from "@/components/ui/toast.jsx";
+import { toast } from "@/hooks/use-toast.js";
 
 export default function CreatePost() {
   const [images, setImages] = useState([]);
@@ -108,7 +110,11 @@ export default function CreatePost() {
         },
       });
 
-      alert("File berhasil diunggah!");
+      toast({
+        title: "Success",
+        description: "Berhasil dipost!",
+      });
+
       fetchPosts().then();
       setImages([]);
     } catch (error) {

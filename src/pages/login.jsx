@@ -14,16 +14,12 @@ import axios from "axios";
 import { apiUrl } from "@/env.js";
 import { useToast } from "@/hooks/use-toast.js";
 import { Toaster } from "@/components/ui/toaster.jsx";
-import { useDispatch, useSelector } from "react-redux";
-import { loggedIn } from "@/services/isLoginSlice.js";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
-  const isLogin = useSelector((state) => state.isLogin.value);
-  const dispatch = useDispatch();
 
   const handleLogin = async () => {
     try {
@@ -50,7 +46,6 @@ export default function LoginPage() {
         JSON.stringify(responseGetUser.data.data[0]),
       );
 
-      dispatch(loggedIn());
       navigate("/");
     } catch (error) {
       toast({
@@ -60,8 +55,6 @@ export default function LoginPage() {
       });
       console.error("Login gagal:", error.response?.data || error.message);
     }
-
-    console.log(isLogin);
   };
 
   return (

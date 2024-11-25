@@ -54,7 +54,7 @@ export default function ForumPost(props) {
           <p>{data.caption}</p>
         </div>
         <Carousel>
-          <CarouselContent>
+          <CarouselContent className={"flex items-center"}>
             {data.images.map((image, index) => (
               <CarouselItem key={index}>
                 <img
@@ -65,8 +65,6 @@ export default function ForumPost(props) {
               </CarouselItem>
             ))}
           </CarouselContent>
-          {/*<CarouselPrevious />*/}
-          {/*<CarouselNext />*/}
         </Carousel>
       </div>
 
@@ -112,12 +110,16 @@ export default function ForumPost(props) {
                 </div>
                 <Carousel>
                   <CarouselContent>
-                    <CarouselItem>...</CarouselItem>
-                    <CarouselItem>...</CarouselItem>
-                    <CarouselItem>...</CarouselItem>
+                    {data.images.map((image, index) => (
+                      <CarouselItem key={index} className={"flex items-center"}>
+                        <img
+                          src={`${apiUrl}/${image.path}`}
+                          alt={`post-image-${index}`}
+                          loading="lazy"
+                        />
+                      </CarouselItem>
+                    ))}
                   </CarouselContent>
-                  {/*<CarouselPrevious />*/}
-                  {/*<CarouselNext />*/}
                 </Carousel>
               </div>
 
