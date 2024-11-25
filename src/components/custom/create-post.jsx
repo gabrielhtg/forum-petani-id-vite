@@ -13,12 +13,35 @@ import {
 import { SendHorizontal, Trash2 } from "lucide-react";
 import axios from "axios";
 import { apiUrl } from "@/env.js";
+import { getUserInitials } from "@/services/getUserInitials.js";
+import { setPosts } from "@/services/postsSlice.js";
+import { useDispatch, useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
 
 export default function CreatePost() {
   const [images, setImages] = useState([]);
   const [error, setError] = useState("");
   const [caption, setCaption] = useState("");
   const [isUploading, setIsUploading] = useState(false);
+  const userData = JSON.parse(localStorage.getItem("userData"));
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/api/posts`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      dispatch(setPosts(response.data.data));
+    } catch (err) {
+      if (err.status === 401) {
+        navigate("/login");
+      }
+    }
+  };
 
   const onDrop = useCallback((acceptedFiles) => {
     const validFiles = acceptedFiles.filter((file) => {
@@ -76,6 +99,7 @@ export default function CreatePost() {
 
       console.log("File uploaded successfully:", response.data);
       alert("File berhasil diunggah!");
+      fetchPosts().then();
       setImages([]);
     } catch (error) {
       console.error("Error uploading file:", error);
@@ -110,8 +134,8 @@ export default function CreatePost() {
       <h3 className="font-bold text-lg">Buat Postingan Baru</h3>
       <div className="flex gap-3 items-center">
         <Avatar>
-          <AvatarImage src={"https://github.com/shadcn.png"} />
-          <AvatarFallback>TN</AvatarFallback>
+          <AvatarImage src={`${apiUrl}/${userData.profile_pict}`} />
+          <AvatarFallback>{getUserInitials(userData.name)}</AvatarFallback>
         </Avatar>
         <Dialog>
           <DialogTrigger asChild>

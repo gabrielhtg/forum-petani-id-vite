@@ -8,12 +8,12 @@ import {
 import { Input } from "@/components/ui/input.jsx";
 import { Button } from "@/components/ui/button.jsx";
 import { Link } from "react-router-dom";
-import {useState} from "react";
+import { useState } from "react";
 import axios from "axios";
-import {apiUrl} from "@/env.js";
-import {useToast} from "@/hooks/use-toast.js";
-import {ToastAction} from "@/components/ui/toast.jsx";
-import {Toaster} from "@/components/ui/toaster.jsx";
+import { apiUrl } from "@/env.js";
+import { useToast } from "@/hooks/use-toast.js";
+import { ToastAction } from "@/components/ui/toast.jsx";
+import { Toaster } from "@/components/ui/toaster.jsx";
 
 export default function RegisterPage() {
   const [email, setEmail] = useState("");
@@ -23,33 +23,35 @@ export default function RegisterPage() {
   const [pekerjaan, setPekerjaan] = useState("");
   const [nomorTelepone, setNomorTelepone] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const {toast} = useToast()
+  const { toast } = useToast();
 
   const handleRegister = async () => {
     try {
       const response = await axios.post(`${apiUrl}/api/users`, {
         email: email,
-        nama: nama,
+        name: nama,
         username: username,
-        password:password,
+        password: password,
         pekerjaan: pekerjaan,
         nomorTelepon: nomorTelepone,
-        confirmPassword: confirmPassword
+        confirmPassword: confirmPassword,
       });
 
       toast({
         title: "Success",
         description: response.data.data,
-        action: <ToastAction asChild altText="Ayo masuk sekarang!">
-          <Link to="/login">Ayo masuk sekarang!</Link>
-        </ToastAction>
-      })
+        action: (
+          <ToastAction asChild altText="Ayo masuk sekarang!">
+            <Link to="/login">Ayo masuk sekarang!</Link>
+          </ToastAction>
+        ),
+      });
     } catch (error) {
       toast({
         variant: "destructive",
         title: "Oppps...",
         description: error.response.data.data,
-      })
+      });
       console.error("Login gagal:", error.response?.data || error.message);
     }
   };
@@ -70,20 +72,61 @@ export default function RegisterPage() {
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-3 w-full">
-            <Input onChange={(e)=>{setEmail(e.target.value)}} type="email" placeholder="Email" />
-            <Input onChange={(e)=>{setNama(e.target.value)}} type="text" placeholder="Nama Lengkap" />
-            <Input onChange={(e)=>{setUsername(e.target.value)}} type="text" placeholder="Username" />
-            <Input onChange={(e)=>{setPassword(e.target.value)}} type="password" placeholder="Password" />
-            <Input onChange={(e)=>{setConfirmPassword(e.target.value)}} type="password" placeholder="Confirm Password" />
-            <Input onChange={(e)=>{setPekerjaan(e.target.value)}} type="text" placeholder="Pekerjaan" />
-            <Input onChange={(e)=>{setNomorTelepone(e.target.value)}} type="text" placeholder="Nomor Telepon" />
-
+            <Input
+              onChange={(e) => {
+                setEmail(e.target.value);
+              }}
+              type="email"
+              placeholder="Email"
+            />
+            <Input
+              onChange={(e) => {
+                setNama(e.target.value);
+              }}
+              type="text"
+              placeholder="Nama Lengkap"
+            />
+            <Input
+              onChange={(e) => {
+                setUsername(e.target.value);
+              }}
+              type="text"
+              placeholder="Username"
+            />
+            <Input
+              onChange={(e) => {
+                setPassword(e.target.value);
+              }}
+              type="password"
+              placeholder="Password"
+            />
+            <Input
+              onChange={(e) => {
+                setConfirmPassword(e.target.value);
+              }}
+              type="password"
+              placeholder="Confirm Password"
+            />
+            <Input
+              onChange={(e) => {
+                setPekerjaan(e.target.value);
+              }}
+              type="text"
+              placeholder="Pekerjaan"
+            />
+            <Input
+              onChange={(e) => {
+                setNomorTelepone(e.target.value);
+              }}
+              type="text"
+              placeholder="Nomor Telepon"
+            />
           </div>
         </CardContent>
         <CardFooter>
           <div className={"flex flex-col gap-3 w-full"}>
             <Button className={"w-full"} onClick={handleRegister}>
-             Daftar
+              Daftar
             </Button>
             <Button variant={"secondary"} className={"w-full"} asChild={true}>
               <Link to={"/login"}>Kembali ke Login</Link>
@@ -92,7 +135,7 @@ export default function RegisterPage() {
         </CardFooter>
       </Card>
 
-      <Toaster/>
+      <Toaster />
     </div>
   );
 }

@@ -1,13 +1,16 @@
 import ForumPost from "@/components/custom/forum-post.jsx";
 import CreatePost from "@/components/custom/create-post.jsx";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import { apiUrl } from "@/env.js";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
+import { setPosts } from "@/services/postsSlice.js";
 
 export default function HomePage() {
   const navigate = useNavigate();
-  const [posts, setPosts] = useState([]);
+  const postsData = useSelector((state) => state.posts.value);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -18,7 +21,20 @@ export default function HomePage() {
           },
         });
 
-        setPosts(response.data.data);
+        for (const e of response.data.data) {
+          const postImageResponse = await axios.get(
+            `${apiUrl}/api/posts/pictures/${e.post_id}`,
+            {
+              headers: {
+                Authorization: `Bearer ${localStorage.getItem("token")}`,
+              },
+            },
+          );
+
+          e.images = postImageResponse.data.data;
+        }
+
+        dispatch(setPosts(response.data.data));
       } catch (err) {
         if (err.status === 401) {
           navigate("/login");
@@ -27,15 +43,14 @@ export default function HomePage() {
     };
 
     fetchPosts().then();
-  }, [navigate, posts]);
+  }, [dispatch, navigate]);
 
   return (
     <div className="flex w-full flex-col items-center gap-5">
-      {/* Komponen CreatePost di bagian atas */}
       {localStorage.getItem("username") ? <CreatePost /> : ""}
 
-      {posts.length > 0 ? (
-        posts.map((item, index) => <ForumPost props={item} key={index} />)
+      {postsData.length > 0 ? (
+        postsData.map((item, index) => <ForumPost props={item} key={index} />)
       ) : (
         <div
           className={

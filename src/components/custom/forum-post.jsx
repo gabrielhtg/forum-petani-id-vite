@@ -21,22 +21,30 @@ import { Link } from "react-router-dom";
 import { apiUrl } from "@/env.js";
 import { getUserInitials } from "@/services/getUserInitials.js";
 import { formatPostDate } from "@/services/formatPostDate.js";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel.jsx";
 
 export default function ForumPost(props) {
   const data = props.props;
-  const userData = JSON.parse(localStorage.getItem("userData"));
 
   return (
     <div className="flex flex-col border shadow-sm max-w-2xl rounded-lg p-5 gap-5">
       <div id="post-header" className="flex gap-3 items-center">
         <Avatar>
-          <AvatarImage src={`${apiUrl}/${userData.profile_pict}`} />
-          <AvatarFallback>{getUserInitials(userData.name)}</AvatarFallback>
+          {data.foto_profil == null ? (
+            <AvatarImage src={`${apiUrl}/${data.foto_profil}`} />
+          ) : (
+            ""
+          )}
+          <AvatarFallback>{getUserInitials(data.name)}</AvatarFallback>
         </Avatar>
         <div className="flex flex-col">
-          <span className="font-bold">{userData.name}</span>
+          <span className="font-bold">{data.name}</span>
           <span className="text-slate-500">
-            {formatPostDate(data.updated_at)}
+            {formatPostDate(data.post_created_at)}
           </span>
         </div>
       </div>
@@ -45,7 +53,21 @@ export default function ForumPost(props) {
         <div>
           <p>{data.caption}</p>
         </div>
-        {/*<img src={data.content_image} alt="post-image" loading={"lazy"} />*/}
+        <Carousel>
+          <CarouselContent>
+            {data.images.map((image, index) => (
+              <CarouselItem key={index}>
+                <img
+                  src={`${apiUrl}/${image.path}`}
+                  alt={`post-image-${index}`}
+                  loading="lazy"
+                />
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+          {/*<CarouselPrevious />*/}
+          {/*<CarouselNext />*/}
+        </Carousel>
       </div>
 
       <div id="post-reaction" className="flex w-full justify-evenly">
@@ -69,15 +91,17 @@ export default function ForumPost(props) {
             <div className="flex flex-col max-w-2xl gap-5">
               <div id="post-header" className="flex gap-3 items-center">
                 <Avatar>
-                  <AvatarImage src={`${apiUrl}/${userData.profile_pict}`} />
-                  <AvatarFallback>
-                    {getUserInitials(userData.name)}
-                  </AvatarFallback>
+                  {data.foto_profil == null ? (
+                    <AvatarImage src={`${apiUrl}/${data.foto_profil}`} />
+                  ) : (
+                    ""
+                  )}
+                  <AvatarFallback>{getUserInitials(data.name)}</AvatarFallback>
                 </Avatar>
                 <div className="flex flex-col">
-                  <span className="font-bold">{userData.name}</span>
+                  <span className="font-bold">{data.name}</span>
                   <span className="text-slate-500">
-                    {formatPostDate(data.updated_at)}
+                    {formatPostDate(data.post_created_at)}
                   </span>
                 </div>
               </div>
@@ -86,11 +110,15 @@ export default function ForumPost(props) {
                 <div>
                   <p>{data.caption}</p>
                 </div>
-                {/*<img*/}
-                {/*  src={data.content_image}*/}
-                {/*  alt="post-image"*/}
-                {/*  loading={"lazy"}*/}
-                {/*/>*/}
+                <Carousel>
+                  <CarouselContent>
+                    <CarouselItem>...</CarouselItem>
+                    <CarouselItem>...</CarouselItem>
+                    <CarouselItem>...</CarouselItem>
+                  </CarouselContent>
+                  {/*<CarouselPrevious />*/}
+                  {/*<CarouselNext />*/}
+                </Carousel>
               </div>
 
               <div id="post-reaction" className="flex w-full justify-evenly">
@@ -137,10 +165,12 @@ export default function ForumPost(props) {
 
               <div className="flex gap-3 items-center">
                 <Avatar>
-                  <AvatarImage src={`${apiUrl}/${userData.profile_pict}`} />
-                  <AvatarFallback>
-                    {getUserInitials(userData.name)}
-                  </AvatarFallback>
+                  {data.foto_profil == null ? (
+                    <AvatarImage src={`${apiUrl}/${data.foto_profil}`} />
+                  ) : (
+                    ""
+                  )}
+                  <AvatarFallback>{getUserInitials(data.name)}</AvatarFallback>
                 </Avatar>
                 <Input type="text" placeholder="Tulis disini..." />
                 <Dialog>
@@ -191,8 +221,12 @@ export default function ForumPost(props) {
 
       <div className="flex gap-3 items-center">
         <Avatar>
-          <AvatarImage src={data.avatar} />
-          <AvatarFallback>{getUserInitials(userData.name)}</AvatarFallback>
+          {data.foto_profil == null ? (
+            <AvatarImage src={`${apiUrl}/${data.foto_profil}`} />
+          ) : (
+            ""
+          )}
+          <AvatarFallback>{getUserInitials(data.name)}</AvatarFallback>
         </Avatar>
         <Input type="text" placeholder="Tulis disini..." />
         <Dialog>
