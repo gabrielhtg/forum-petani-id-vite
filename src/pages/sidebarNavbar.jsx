@@ -28,7 +28,6 @@ import { notLoggedIn } from "@/services/isLoginSlice.js";
 import { getUserInitials } from "@/services/getUserInitials.js";
 
 export default function SidebarNavbar() {
-  const navigate = useNavigate();
   const userData = JSON.parse(localStorage.getItem("userData"));
   const [isUsernameExist, setIsUsernameExist] = useState(
     localStorage.getItem("username"),
