@@ -35,13 +35,11 @@ export default function ForumPost(props) {
   const data = props.props;
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(data.total_likes);
-  const [commentCount, setCommentCount] = useState(data.total_comments);
+  const [commentCount] = useState(data.total_comments);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [content, setContent] = useState("");
-  const [isUsernameExist, setIsUsernameExist] = useState(
-    localStorage.getItem("username"),
-  );
+  const [isUsernameExist] = useState(localStorage.getItem("username"));
 
   useEffect(() => {
     // Cek apakah pengguna telah like
