@@ -30,6 +30,8 @@ import axios from "axios";
 import { setPosts } from "@/services/postsSlice.js";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
+import { toast } from "@/hooks/use-toast.js";
+import { Toaster } from "@/components/ui/toaster.jsx";
 
 export default function ForumPost(props) {
   const data = props.props;
@@ -93,8 +95,18 @@ export default function ForumPost(props) {
         },
       );
 
+      setContent("");
       fetchPosts();
+      toast({
+        title: "Success",
+        description: "Berhasil memberikan komentar!",
+      });
     } catch (error) {
+      toast({
+        variant: "destructive",
+        title: "Success",
+        description: "Berhasil dipost!",
+      });
       console.error("Error saat memberi comment:", error);
       alert(
         error.response?.data?.message ||
@@ -163,6 +175,7 @@ export default function ForumPost(props) {
                 className={"flex items-center bg-gray-100"}
               >
                 <img
+                  className={"w-full"}
                   src={`${apiUrl}/${image.path}`}
                   alt={`post-image-${index}`}
                   loading="lazy"
@@ -222,6 +235,7 @@ export default function ForumPost(props) {
                         className={"flex items-center bg-gray-100"}
                       >
                         <img
+                          className={"w-full"}
                           src={`${apiUrl}/${image.path}`}
                           alt={`post-image-${index}`}
                           loading="lazy"
@@ -260,68 +274,92 @@ export default function ForumPost(props) {
 
               <hr />
 
-              {data.comments.includes("null") ? (
+              {data.comments.includes('"comment_id": null') ? (
                 ""
               ) : (
-                <div className="flex gap-3 items-center">
-                  <Avatar>
-                    {data.foto_profil == null ? (
-                      <AvatarImage src={`${apiUrl}/${data.foto_profil}`} />
-                    ) : (
-                      ""
-                    )}
-                    <AvatarFallback>
-                      {getUserInitials(data.name)}
-                    </AvatarFallback>
-                  </Avatar>
-                  <Input
-                    onChange={(e) => {
-                      setContent(e.target.value);
-                    }}
-                    type="text"
-                    placeholder="Tulis disini..."
-                  />
-                  {isUsernameExist ? (
-                    <Button onClick={addComment}>
-                      <SendHorizontal />
-                    </Button>
-                  ) : (
-                    <Dialog>
-                      <DialogTrigger asChild>
-                        <Button>
-                          <SendHorizontal />
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent>
-                        <DialogHeader>
-                          <DialogTitle className="text-center">
-                            Masuk atau Buat Akun Sekarang!
-                          </DialogTitle>
-                          <DialogDescription>
-                            <div className="flex justify-center flex-col w-full items-center mt-5 gap-3">
-                              <div className="border w-24 h-24 rounded-full flex items-center justify-center text-4xl">
-                                <KeyRound />
-                              </div>
-                              <p>
-                                Kamu tidak bisa melakukan aksi ini karena belum
-                                masuk. Ayooo masuk sekarang juga!!
-                              </p>
-                              <div className="flex w-full gap-3 mt-3">
-                                <Button asChild className="flex-1">
-                                  <Link to="/login">Login</Link>
-                                </Button>
-                                <Button asChild className="flex-1">
-                                  <Link to="/register">Register</Link>
-                                </Button>
-                              </div>
-                            </div>
-                          </DialogDescription>
-                        </DialogHeader>
-                      </DialogContent>
-                    </Dialog>
-                  )}
+                <div className="comments-section">
+                  {JSON.parse(data.comments).map((comment, index) => (
+                    <div
+                      key={index}
+                      className="flex gap-3 items-center mb-2 bg-slate-100 p-3 rounded-lg"
+                    >
+                      <Avatar>
+                        <AvatarImage src={`${apiUrl}/${data.foto_profil}`} />
+                        <AvatarFallback>
+                          {getUserInitials(comment.commenter_name)}
+                        </AvatarFallback>
+                      </Avatar>
+                      <div className="comment-content">
+                        <span className="font-bold">
+                          {comment.commenter_name}
+                        </span>
+                        <p>{comment.comment_text}</p>
+                        <span className="text-slate-500">
+                          {formatPostDate(comment.comment_created_at)}
+                        </span>
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
+
+              <div className="flex gap-3 items-center">
+                <Avatar>
+                  {data.foto_profil == null ? (
+                    <AvatarImage src={`${apiUrl}/${data.foto_profil}`} />
+                  ) : (
+                    ""
+                  )}
+                  <AvatarFallback>{getUserInitials(data.name)}</AvatarFallback>
+                </Avatar>
+                <Input
+                  value={content}
+                  onChange={(e) => {
+                    setContent(e.target.value);
+                  }}
+                  type="text"
+                  placeholder="Tulis disini..."
+                />
+                {isUsernameExist ? (
+                  <Button onClick={addComment}>
+                    <SendHorizontal />
+                  </Button>
+                ) : (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button>
+                        <SendHorizontal />
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle className="text-center">
+                          Masuk atau Buat Akun Sekarang!
+                        </DialogTitle>
+                        <DialogDescription>
+                          <div className="flex justify-center flex-col w-full items-center mt-5 gap-3">
+                            <div className="border w-24 h-24 rounded-full flex items-center justify-center text-4xl">
+                              <KeyRound />
+                            </div>
+                            <p>
+                              Kamu tidak bisa melakukan aksi ini karena belum
+                              masuk. Ayooo masuk sekarang juga!!
+                            </p>
+                            <div className="flex w-full gap-3 mt-3">
+                              <Button asChild className="flex-1">
+                                <Link to="/login">Login</Link>
+                              </Button>
+                              <Button asChild className="flex-1">
+                                <Link to="/register">Register</Link>
+                              </Button>
+                            </div>
+                          </div>
+                        </DialogDescription>
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
+                )}
+              </div>
             </div>
           </DialogContent>
         </Dialog>
@@ -344,6 +382,7 @@ export default function ForumPost(props) {
           <AvatarFallback>{getUserInitials(data.name)}</AvatarFallback>
         </Avatar>
         <Input
+          value={content}
           onChange={(e) => {
             setContent(e.target.value);
           }}
@@ -390,6 +429,7 @@ export default function ForumPost(props) {
           </Dialog>
         )}
       </div>
+      <Toaster />
     </div>
   );
 }
