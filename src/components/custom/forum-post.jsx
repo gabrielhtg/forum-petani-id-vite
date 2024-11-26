@@ -29,11 +29,22 @@ import {
 import axios from "axios";
 import { setPosts } from "@/services/postsSlice.js";
 import { useDispatch } from "react-redux";
+import { useEffect, useState } from "react";
 
 export default function ForumPost(props) {
   const data = props.props;
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(data.total_likes);
   const dispatch = useDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    // Cek apakah pengguna telah like
+    const userLiked = data.liked_users.includes(
+      localStorage.getItem("username"),
+    );
+    setLiked(userLiked);
+  }, [data]);
 
   const handleLike = async () => {
     try {
@@ -50,11 +61,15 @@ export default function ForumPost(props) {
         },
       );
 
-      fetchPosts().then();
+      // Toggle status like dan jumlah like
+      setLiked((prev) => !prev);
+      setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
+
+      fetchPosts();
     } catch (error) {
       console.error("Error saat memberi like:", error);
       alert(
-        error.response.data.message || "Terjadi kesalahan saat memberi like",
+        error.response?.data?.message || "Terjadi kesalahan saat memberi like",
       );
     }
   };
@@ -130,11 +145,12 @@ export default function ForumPost(props) {
       </div>
 
       <div id="post-reaction" className="flex w-full justify-evenly">
-        <Button variant="ghost" className="flex-1" onClick={handleLike}>
+        <Button variant="ghost" className={`flex-1`} onClick={handleLike}>
           <span className="flex items-center gap-1">
-            <ThumbsUp /> {data.total_likes}
+            <ThumbsUp fill={liked ? "blue" : "none"} />
+            {likeCount}
           </span>
-          <span className={"hidden md:block"}>Like</span>
+          <span className="hidden md:block">Like</span>
         </Button>
 
         <Dialog>
@@ -188,11 +204,16 @@ export default function ForumPost(props) {
               </div>
 
               <div id="post-reaction" className="flex w-full justify-evenly">
-                <Button variant="ghost" className="flex-1" onClick={handleLike}>
+                <Button
+                  variant="ghost"
+                  className={`flex-1`}
+                  onClick={handleLike}
+                >
                   <span className="flex items-center gap-1">
-                    <ThumbsUp fill="blue" /> {data.total_likes}
+                    <ThumbsUp fill={liked ? "blue" : "none"} />
+                    {likeCount}
                   </span>
-                  <span className={"hidden md:block"}>Like</span>
+                  <span className="hidden md:block">Like</span>
                 </Button>
 
                 <Button variant="ghost" className="flex-1">
