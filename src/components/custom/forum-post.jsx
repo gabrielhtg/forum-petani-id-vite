@@ -260,7 +260,7 @@ export default function ForumPost(props) {
 
               <hr />
 
-              {data.comments.comment_id.includes("null") ? (
+              {data.comments.includes("null") ? (
                 ""
               ) : (
                 <div className="flex gap-3 items-center">
