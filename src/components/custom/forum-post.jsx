@@ -17,7 +17,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { apiUrl } from "@/env.js";
 import { getUserInitials } from "@/services/getUserInitials.js";
 import { formatPostDate } from "@/services/formatPostDate.js";
@@ -26,9 +26,67 @@ import {
   CarouselContent,
   CarouselItem,
 } from "@/components/ui/carousel.jsx";
+import axios from "axios";
+import { setPosts } from "@/services/postsSlice.js";
+import { useDispatch } from "react-redux";
 
 export default function ForumPost(props) {
   const data = props.props;
+  const dispatch = useDispatch();
+  const navigate = useNavigate();
+
+  const handleLike = async () => {
+    try {
+      await axios.post(
+        `${apiUrl}/api/like`,
+        {
+          userId: localStorage.getItem("username"),
+          postId: data.post_id,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+
+      fetchPosts().then();
+    } catch (error) {
+      console.error("Error saat memberi like:", error);
+      alert(
+        error.response.data.message || "Terjadi kesalahan saat memberi like",
+      );
+    }
+  };
+
+  const fetchPosts = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/api/posts`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      for (const e of response.data.data) {
+        const postImageResponse = await axios.get(
+          `${apiUrl}/api/posts/pictures/${e.post_id}`,
+          {
+            headers: {
+              Authorization: `Bearer ${localStorage.getItem("token")}`,
+            },
+          },
+        );
+
+        e.images = postImageResponse.data.data;
+      }
+
+      dispatch(setPosts(response.data.data));
+    } catch (err) {
+      if (err.status === 401) {
+        navigate("/login");
+      }
+    }
+  };
 
   return (
     <div className="flex flex-col border shadow-sm max-w-2xl rounded-lg p-5 gap-5">
@@ -54,9 +112,12 @@ export default function ForumPost(props) {
           <p>{data.caption}</p>
         </div>
         <Carousel>
-          <CarouselContent className={"flex items-center"}>
+          <CarouselContent>
             {data.images.map((image, index) => (
-              <CarouselItem key={index}>
+              <CarouselItem
+                key={index}
+                className={"flex items-center bg-gray-100"}
+              >
                 <img
                   src={`${apiUrl}/${image.path}`}
                   alt={`post-image-${index}`}
@@ -69,9 +130,9 @@ export default function ForumPost(props) {
       </div>
 
       <div id="post-reaction" className="flex w-full justify-evenly">
-        <Button variant="ghost" className="flex-1">
+        <Button variant="ghost" className="flex-1" onClick={handleLike}>
           <span className="flex items-center gap-1">
-            <ThumbsUp /> {10}
+            <ThumbsUp /> {data.total_likes}
           </span>
           <span className={"hidden md:block"}>Like</span>
         </Button>
@@ -111,7 +172,10 @@ export default function ForumPost(props) {
                 <Carousel>
                   <CarouselContent>
                     {data.images.map((image, index) => (
-                      <CarouselItem key={index} className={"flex items-center"}>
+                      <CarouselItem
+                        key={index}
+                        className={"flex items-center bg-gray-100"}
+                      >
                         <img
                           src={`${apiUrl}/${image.path}`}
                           alt={`post-image-${index}`}
@@ -124,9 +188,9 @@ export default function ForumPost(props) {
               </div>
 
               <div id="post-reaction" className="flex w-full justify-evenly">
-                <Button variant="ghost" className="flex-1">
+                <Button variant="ghost" className="flex-1" onClick={handleLike}>
                   <span className="flex items-center gap-1">
-                    <ThumbsUp fill="blue" /> {10}
+                    <ThumbsUp fill="blue" /> {data.total_likes}
                   </span>
                   <span className={"hidden md:block"}>Like</span>
                 </Button>

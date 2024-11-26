@@ -16,8 +16,7 @@ import { apiUrl } from "@/env.js";
 import { getUserInitials } from "@/services/getUserInitials.js";
 import { setPosts } from "@/services/postsSlice.js";
 import { useDispatch } from "react-redux";
-import { Link, useNavigate } from "react-router-dom";
-import { ToastAction } from "@/components/ui/toast.jsx";
+import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast.js";
 
 export default function CreatePost() {
