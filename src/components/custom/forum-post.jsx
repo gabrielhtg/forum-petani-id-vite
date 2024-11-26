@@ -145,7 +145,7 @@ export default function ForumPost(props) {
   };
 
   return (
-    <div className="flex flex-col border shadow-sm max-w-2xl rounded-lg p-5 gap-5">
+    <div className="flex flex-col border shadow-sm w-full max-w-2xl rounded-lg p-5 gap-5">
       <div id="post-header" className="flex gap-3 items-center">
         <Avatar>
           {data.foto_profil == null ? (
@@ -163,7 +163,7 @@ export default function ForumPost(props) {
         </div>
       </div>
 
-      <div id="post-content" className="flex flex-col gap-2">
+      <div id="post-content" className="flex w-full flex-col gap-2">
         <div>
           <p>{data.caption}</p>
         </div>
