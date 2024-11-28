@@ -3,9 +3,11 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import {
   MessageCircle,
   ThumbsUp,
+  Trash2,
   ExternalLink,
   SendHorizontal,
   KeyRound,
+  MoreVertical,
 } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button.jsx";
@@ -32,6 +34,12 @@ import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast.js";
 import { Toaster } from "@/components/ui/toaster.jsx";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu.jsx";
 
 export default function ForumPost(props) {
   const data = props.props;
@@ -148,21 +156,44 @@ export default function ForumPost(props) {
 
   return (
     <div className="flex flex-col border shadow-sm w-full max-w-2xl rounded-lg p-5 gap-5">
-      <div id="post-header" className="flex gap-3 items-center">
-        <Avatar>
-          {data.foto_profil == null ? (
-            <AvatarImage src={`${apiUrl}/${data.foto_profil}`} />
-          ) : (
-            ""
-          )}
-          <AvatarFallback>{getUserInitials(data.name)}</AvatarFallback>
-        </Avatar>
-        <div className="flex flex-col">
-          <span className="font-bold">{data.name}</span>
-          <span className="text-slate-500">
-            {formatPostDate(data.post_created_at)}
-          </span>
+      <div id="post-header" className="flex justify-between">
+        <div className={"flex gap-3 items-center"}>
+          <Avatar>
+            {data.foto_profil == null ? (
+              <AvatarImage src={`${apiUrl}/${data.foto_profil}`} />
+            ) : (
+              ""
+            )}
+            <AvatarFallback>{getUserInitials(data.name)}</AvatarFallback>
+          </Avatar>
+          <div className="flex flex-col">
+            <span className="font-bold">{data.name}</span>
+            <span className="text-slate-500">
+              {formatPostDate(data.post_created_at)}
+            </span>
+          </div>
         </div>
+
+        {data.username === localStorage.getItem("username") ? (
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Button variant="ghost" size="icon">
+                <MoreVertical />
+              </Button>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent align="end">
+              <DropdownMenuItem
+                // onClick={() => handleDeletePost(data.post_id)} // Fungsi untuk delete post
+                className="text-red-600"
+              >
+                <Trash2 className="mr-2" size={16} />
+                Delete
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ) : (
+          ""
+        )}
       </div>
 
       <div id="post-content" className="flex w-full flex-col gap-2">
@@ -431,7 +462,6 @@ export default function ForumPost(props) {
           </Dialog>
         )}
       </div>
-      <Toaster />
     </div>
   );
 }

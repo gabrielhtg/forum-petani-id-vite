@@ -48,7 +48,7 @@ export default function HomePage() {
 
   return (
     <div className="flex w-full flex-col items-center gap-5">
-      {localStorage.getItem("username") ? <CreatePost /> : ""}
+      {/*{localStorage.getItem("username") ? <CreatePost /> : ""}*/}
 
       {postsData.length > 0 ? (
         postsData.map((item, index) => <ForumPost props={item} key={index} />)

@@ -16,7 +16,6 @@ import { apiUrl } from "@/env.js";
 import { getUserInitials } from "@/services/getUserInitials.js";
 import { setPosts } from "@/services/postsSlice.js";
 import { useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
 import { toast } from "@/hooks/use-toast.js";
 
 export default function CreatePost() {
@@ -25,7 +24,6 @@ export default function CreatePost() {
   const [caption, setCaption] = useState("");
   const userData = JSON.parse(localStorage.getItem("userData"));
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const fetchPosts = async () => {
     try {
@@ -108,10 +106,10 @@ export default function CreatePost() {
         },
       });
 
-      // toast({
-      //   title: "Success",
-      //   description: "Berhasil dipost!",
-      // });
+      toast({
+        title: "Success",
+        description: "Berhasil dipost!",
+      });
 
       fetchPosts().then();
       setImages([]);
