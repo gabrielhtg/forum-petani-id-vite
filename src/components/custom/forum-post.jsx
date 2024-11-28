@@ -6,6 +6,7 @@ import {
   Trash2,
   ExternalLink,
   SendHorizontal,
+  PencilLine,
   KeyRound,
   MoreVertical,
 } from "lucide-react";
@@ -33,7 +34,7 @@ import { setPosts } from "@/services/postsSlice.js";
 import { useDispatch } from "react-redux";
 import { useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast.js";
-import { Toaster } from "@/components/ui/toaster.jsx";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -125,6 +126,27 @@ export default function ForumPost(props) {
     }
   };
 
+  const handleDeletePost = async () => {
+    try {
+      await axios.delete(`${apiUrl}/api/posts/${data.post_id}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      toast({
+        title: "Success",
+        description: "Berhasil menghapus post!!",
+      });
+
+      fetchPosts().then();
+    } catch (err) {
+      if (err.status === 401) {
+        navigate("/login");
+      }
+    }
+  };
+
   const fetchPosts = async () => {
     try {
       const response = await axios.get(`${apiUrl}/api/posts`, {
@@ -182,12 +204,17 @@ export default function ForumPost(props) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
+              <DropdownMenuItem>
+                <PencilLine className="mr-2" size={16} />
+                Edit
+              </DropdownMenuItem>
               <DropdownMenuItem
-                // onClick={() => handleDeletePost(data.post_id)} // Fungsi untuk delete post
-                className="text-red-600"
+                onClick={() => handleDeletePost(data.post_id)} // Fungsi untuk delete post
               >
-                <Trash2 className="mr-2" size={16} />
-                Delete
+                <span className={"text-red-600"}>
+                  <Trash2 className="mr-2" size={16} />
+                </span>
+                <span className={"text-red-600"}>Hapus</span>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
