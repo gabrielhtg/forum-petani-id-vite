@@ -11,6 +11,7 @@ import { Toaster } from "@/components/ui/toaster.jsx";
 export default function HomePage() {
   const navigate = useNavigate();
   const postsData = useSelector((state) => state.posts.value);
+  const loginData = useSelector((state) => state.isLogin.value);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -48,7 +49,7 @@ export default function HomePage() {
 
   return (
     <div className="flex w-full flex-col items-center gap-5">
-      {localStorage.getItem("username") ? <CreatePost /> : ""}
+      {loginData ? <CreatePost /> : ""}
 
       {postsData.length > 0 ? (
         postsData.map((item, index) => <ForumPost props={item} key={index} />)

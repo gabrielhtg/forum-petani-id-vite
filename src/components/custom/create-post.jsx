@@ -50,9 +50,10 @@ export default function CreatePost() {
 
       dispatch(setPosts(response.data.data));
     } catch (err) {
-      if (err.status === 401) {
-        navigate("/login");
-      }
+      console.log(err);
+      // if (err.status === 401) {
+      //   navigate("/login");
+      // }
     }
   };
 
@@ -100,8 +101,6 @@ export default function CreatePost() {
     formData.append("username", localStorage.getItem("username"));
 
     try {
-      setError("");
-
       await axios.post(`${apiUrl}/api/posts`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
@@ -109,10 +108,10 @@ export default function CreatePost() {
         },
       });
 
-      toast({
-        title: "Success",
-        description: "Berhasil dipost!",
-      });
+      // toast({
+      //   title: "Success",
+      //   description: "Berhasil dipost!",
+      // });
 
       fetchPosts().then();
       setImages([]);

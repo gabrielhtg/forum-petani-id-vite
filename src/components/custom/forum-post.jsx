@@ -36,7 +36,7 @@ import { Toaster } from "@/components/ui/toaster.jsx";
 export default function ForumPost(props) {
   const data = props.props;
   const [liked, setLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(data.total_likes);
+  const [likeCount, setLikeCount] = useState(0);
   const [commentCount] = useState(data.total_comments);
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -44,6 +44,8 @@ export default function ForumPost(props) {
   const [isUsernameExist] = useState(localStorage.getItem("username"));
 
   useEffect(() => {
+    setLikeCount(data.total_likes);
+
     // Cek apakah pengguna telah like
     const userLiked = data.liked_users.includes(
       localStorage.getItem("username"),

@@ -14,12 +14,15 @@ import axios from "axios";
 import { apiUrl } from "@/env.js";
 import { useToast } from "@/hooks/use-toast.js";
 import { Toaster } from "@/components/ui/toaster.jsx";
+import { useDispatch } from "react-redux";
+import { loggedIn } from "@/services/isLoginSlice.js";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
   const { toast } = useToast();
+  const dispatch = useDispatch();
 
   const handleLogin = async () => {
     try {
@@ -31,6 +34,7 @@ export default function LoginPage() {
       localStorage.setItem("token", responseLogin.data.data.token);
       localStorage.setItem("username", username);
       localStorage.setItem("name", responseLogin.data.data.name);
+      dispatch(loggedIn());
 
       const responseGetUser = await axios.get(
         `${apiUrl}/api/users/${username}`,
