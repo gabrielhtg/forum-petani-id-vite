@@ -32,7 +32,7 @@ import {
 import axios from "axios";
 import { setPosts } from "@/services/postsSlice.js";
 import { useDispatch } from "react-redux";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast.js";
 
 import {
@@ -41,6 +41,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.jsx";
+import { useDropzone } from "react-dropzone";
 
 export default function ForumPost(props) {
   const data = props.props;
@@ -51,6 +52,41 @@ export default function ForumPost(props) {
   const navigate = useNavigate();
   const [content, setContent] = useState("");
   const [isUsernameExist] = useState(localStorage.getItem("username"));
+  const [error, setError] = useState("");
+  const [postDisabled, setPostDisabled] = useState(false);
+  const [images, setImages] = useState([]);
+
+  const onDrop = useCallback((acceptedFiles) => {
+    const validFiles = acceptedFiles.filter((file) => {
+      if (!file.type.startsWith("image/")) {
+        setError("Hanya file gambar yang diperbolehkan.");
+        setPostDisabled(true);
+        return false;
+      }
+      if (file.size > 3 * 1024 * 1024) {
+        // 2MB
+        setError("Ukuran file maksimal 2MB.");
+        setPostDisabled(true);
+        return false;
+      }
+      return true;
+    });
+
+    if (validFiles.length > 10) {
+      setError("Maksimal gambar 10");
+      setPostDisabled(true);
+      setImages((prevImages) => [...prevImages, ...validFiles]);
+    }
+
+    // Reset error jika tidak ada masalah
+    if (validFiles.length > 0) {
+      setError("");
+      setPostDisabled("");
+      setImages((prevImages) => [...prevImages, ...validFiles]);
+    }
+  }, []);
+
+  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   useEffect(() => {
     setLikeCount(data.total_likes);
@@ -147,6 +183,29 @@ export default function ForumPost(props) {
     }
   };
 
+  const files = images.map((file) => {
+    const fileSizeInMB = (file.size / (1024 * 1024)).toFixed(2);
+    return (
+      <li
+        key={file.path}
+        className="flex p-3 border rounded-lg justify-between items-center"
+      >
+        <span>
+          {file.name} - {fileSizeInMB} MB
+        </span>
+        <Button variant="destructive" onClick={() => removeFile(file)}>
+          <Trash2 />
+        </Button>
+      </li>
+    );
+  });
+
+  const removeFile = (fileToRemove) => {
+    setImages((prevImages) =>
+      prevImages.filter((file) => file.path !== fileToRemove.path),
+    );
+  };
+
   const fetchPosts = async () => {
     try {
       const response = await axios.get(`${apiUrl}/api/posts`, {
@@ -204,10 +263,58 @@ export default function ForumPost(props) {
               </Button>
             </DropdownMenuTrigger>
             <DropdownMenuContent align="end">
-              <DropdownMenuItem>
-                <PencilLine className="mr-2" size={16} />
-                Edit
-              </DropdownMenuItem>
+              <Dialog>
+                <DialogTrigger asChild={true}>
+                  <DropdownMenuItem>
+                    <PencilLine className="mr-2" size={16} />
+                    Edit
+                  </DropdownMenuItem>
+                </DialogTrigger>
+
+                <DialogContent className="sm:max-w-2xl max-h-[calc(100vh-165px)] overflow-y-scroll">
+                  <DialogHeader>
+                    <DialogTitle>Buat Postingan Baru</DialogTitle>
+                  </DialogHeader>
+                  <div className="flex flex-col gap-4 mt-4">
+                      <textarea
+                          // onChange={(e) => {
+                          //   setCaption(e.target.value);
+                          // }}
+                          className="border rounded-lg p-3 w-full text-sm focus:outline-none focus:ring focus:ring-blue-200"
+                          placeholder="Tulis sesuatu di sini..."
+                          rows="5"
+                      ></textarea>
+
+                    <section className="container">
+                      <div
+                          {...getRootProps({ className: "dropzone" })}
+                          className="border-2 border-dashed p-10 flex justify-center rounded-lg"
+                      >
+                        <input {...getInputProps()} />
+                        <p>Geser gambar anda ke sini!</p>
+                      </div>
+                      {error && (
+                          <p className="text-red-500 mt-2">{error}</p> // Menampilkan pesan error
+                      )}
+                      <aside className="mt-3">
+                        <h4 className="font-bold">Files</h4>
+                        <ul className="mt-3 flex flex-col gap-3">{files}</ul>
+                      </aside>
+                    </section>
+
+                    <div className="flex justify-end items-center mt-4">
+                      <Button
+                          // onClick={handleUpload}
+                          disabled={postDisabled}
+                      >
+                        <SendHorizontal className="mr-2" />
+                        Post
+                      </Button>
+                    </div>
+                  </div>
+                </DialogContent>
+              </Dialog>
+
               <DropdownMenuItem
                 onClick={() => handleDeletePost(data.post_id)} // Fungsi untuk delete post
               >

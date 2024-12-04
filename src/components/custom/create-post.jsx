@@ -6,17 +6,19 @@ import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from "@/components/ui/dialog";
-import { SendHorizontal, Trash2 } from "lucide-react";
+import { KeyRound, SendHorizontal, Trash2 } from "lucide-react";
 import axios from "axios";
 import { apiUrl } from "@/env.js";
 import { getUserInitials } from "@/services/getUserInitials.js";
 import { setPosts } from "@/services/postsSlice.js";
 import { useDispatch } from "react-redux";
 import { toast } from "@/hooks/use-toast.js";
+import { Link } from "react-router-dom";
 
 export default function CreatePost() {
   const [images, setImages] = useState([]);
@@ -24,6 +26,8 @@ export default function CreatePost() {
   const [caption, setCaption] = useState("");
   const userData = JSON.parse(localStorage.getItem("userData"));
   const dispatch = useDispatch();
+  const [open, setOpen] = useState(false);
+  const [postDisabled, setPostDisabled] = useState(false);
 
   const fetchPosts = async () => {
     try {
@@ -59,19 +63,28 @@ export default function CreatePost() {
     const validFiles = acceptedFiles.filter((file) => {
       if (!file.type.startsWith("image/")) {
         setError("Hanya file gambar yang diperbolehkan.");
+        setPostDisabled(true);
         return false;
       }
       if (file.size > 3 * 1024 * 1024) {
         // 2MB
         setError("Ukuran file maksimal 2MB.");
+        setPostDisabled(true);
         return false;
       }
       return true;
     });
 
+    if (validFiles.length > 10) {
+      setError("Maksimal gambar 10");
+      setPostDisabled(true);
+      setImages((prevImages) => [...prevImages, ...validFiles]);
+    }
+
     // Reset error jika tidak ada masalah
     if (validFiles.length > 0) {
       setError("");
+      setPostDisabled("");
       setImages((prevImages) => [...prevImages, ...validFiles]);
     }
   }, []);
@@ -87,12 +100,13 @@ export default function CreatePost() {
   const handleUpload = async () => {
     if (images.length === 0) {
       setError("Harap pilih setidaknya satu gambar.");
+      setPostDisabled(true);
       return;
     }
 
     const formData = new FormData();
     images.forEach((image) => {
-      formData.append("files", image); // Nama field sesuai dengan backend
+      formData.append("files", image);
     });
 
     formData.append("caption", caption);
@@ -114,7 +128,10 @@ export default function CreatePost() {
       fetchPosts().then();
       setImages([]);
     } catch (error) {
-      console.error("Error uploading file:", error);
+      if (error.status === 401) {
+        setOpen(true);
+      }
+      console.log("Error uploading file:", error);
       setError("Gagal mengunggah file. Coba lagi.");
     }
   };
@@ -141,6 +158,39 @@ export default function CreatePost() {
       id="create-post"
       className="flex flex-col gap-3 border rounded-lg p-5 shadow-sm bg-white max-w-2xl w-full"
     >
+      <Dialog open={open} onOpenChange={setOpen}>
+        {/*<DialogTrigger asChild>*/}
+        {/*  <Button>*/}
+        {/*    <SendHorizontal />*/}
+        {/*  </Button>*/}
+        {/*</DialogTrigger>*/}
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle className="text-center">
+              Masuk atau Buat Akun Sekarang!
+            </DialogTitle>
+            <DialogDescription>
+              <div className="flex justify-center flex-col w-full items-center mt-5 gap-3">
+                <div className="border w-24 h-24 rounded-full flex items-center justify-center text-4xl">
+                  <KeyRound />
+                </div>
+                <p>
+                  Kamu tidak bisa melakukan aksi ini karena belum masuk. Ayooo
+                  masuk sekarang juga!!
+                </p>
+                <div className="flex w-full gap-3 mt-3">
+                  <Button asChild className="flex-1">
+                    <Link to="/login">Login</Link>
+                  </Button>
+                  <Button asChild className="flex-1">
+                    <Link to="/register">Register</Link>
+                  </Button>
+                </div>
+              </div>
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
       <h3 className="font-bold text-lg">Buat Postingan Baru</h3>
       <div className="flex gap-3 items-center">
         <Avatar>
@@ -188,7 +238,7 @@ export default function CreatePost() {
               </section>
 
               <div className="flex justify-end items-center mt-4">
-                <Button onClick={handleUpload}>
+                <Button onClick={handleUpload} disabled={postDisabled}>
                   <SendHorizontal className="mr-2" />
                   Post
                 </Button>
