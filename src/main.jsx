@@ -14,6 +14,7 @@ import ProfilePage from "@/pages/profile.jsx";
 import PopularPage from "@/pages/popular.jsx";
 import { Provider } from "react-redux";
 import store from "./store.js";
+import YourPost from "@/pages/your-post.jsx";
 // import KomunitasPage from "@/pages/komunitas.jsx";
 
 const router = createBrowserRouter([
@@ -50,6 +51,11 @@ const router = createBrowserRouter([
         path: "popular",
         title: "Popular",
         element: <PopularPage />,
+      },
+      {
+        path: "your-post",
+        title: "Your Posts",
+        element: <YourPost />,
       },
       // {
       //     path: 'komunitas',

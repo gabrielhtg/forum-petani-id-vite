@@ -100,9 +100,11 @@ export default function SidebarNavbar() {
                   {" "}
                   <ShoppingBasket /> Produk Anda
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                  {" "}
-                  <PanelTop /> Post Anda
+                <DropdownMenuItem asChild={true}>
+                  <Link to={"/your-post"}>
+                    {" "}
+                    <PanelTop /> Post Anda
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={handleLogout}>
                   <LogOut /> Keluar
