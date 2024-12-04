@@ -1,6 +1,6 @@
 import { Card } from "@/components/ui/card.jsx";
 import { Button } from "@/components/ui/button.jsx";
-import { Phone, MapPin, Plus } from "lucide-react";
+import { MapPin, Plus } from "lucide-react";
 import { Truncate } from "@re-dev/react-truncate";
 import { useNavigate } from "react-router-dom";
 import {
@@ -75,6 +75,8 @@ export default function Marketplace() {
         title: "Success",
         description: response.data.data,
       });
+
+      window.location.reload();
     } catch (error) {
       console.log(error);
       toast({
