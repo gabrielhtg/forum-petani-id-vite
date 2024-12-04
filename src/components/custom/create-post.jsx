@@ -19,6 +19,7 @@ import { setPosts } from "@/services/postsSlice.js";
 import { useDispatch } from "react-redux";
 import { toast } from "@/hooks/use-toast.js";
 import { Link } from "react-router-dom";
+import { Textarea } from "@/components/ui/textarea.jsx";
 
 export default function CreatePost() {
   const [images, setImages] = useState([]);
@@ -156,96 +157,99 @@ export default function CreatePost() {
   return (
     <div
       id="create-post"
-      className="flex flex-col gap-3 border rounded-lg p-5 shadow-sm bg-white max-w-2xl w-full"
+      className="flex justify-center gap-3 border rounded-lg p-5 shadow-sm bg-white w-full lg:w-8/12"
     >
-      <Dialog open={open} onOpenChange={setOpen}>
-        {/*<DialogTrigger asChild>*/}
-        {/*  <Button>*/}
-        {/*    <SendHorizontal />*/}
-        {/*  </Button>*/}
-        {/*</DialogTrigger>*/}
-        <DialogContent>
-          <DialogHeader>
-            <DialogTitle className="text-center">
-              Masuk atau Buat Akun Sekarang!
-            </DialogTitle>
-            <DialogDescription>
-              <div className="flex justify-center flex-col w-full items-center mt-5 gap-3">
-                <div className="border w-24 h-24 rounded-full flex items-center justify-center text-4xl">
-                  <KeyRound />
-                </div>
-                <p>
-                  Kamu tidak bisa melakukan aksi ini karena belum masuk. Ayooo
-                  masuk sekarang juga!!
-                </p>
-                <div className="flex w-full gap-3 mt-3">
-                  <Button asChild className="flex-1">
-                    <Link to="/login">Login</Link>
-                  </Button>
-                  <Button asChild className="flex-1">
-                    <Link to="/register">Register</Link>
-                  </Button>
-                </div>
-              </div>
-            </DialogDescription>
-          </DialogHeader>
-        </DialogContent>
-      </Dialog>
-      <h3 className="font-bold text-lg">Buat Postingan Baru</h3>
-      <div className="flex gap-3 items-center">
-        <Avatar>
-          <AvatarImage src={`${apiUrl}/${userData.profile_pict}`} />
-          <AvatarFallback>{getUserInitials(userData.name)}</AvatarFallback>
-        </Avatar>
-        <Dialog>
-          <DialogTrigger asChild>
-            <Input
-              type="text"
-              placeholder={`Apa yang Anda pikirkan, ${localStorage.getItem("name")}?`}
-              className="cursor-pointer"
-            />
-          </DialogTrigger>
-
-          <DialogContent className="sm:max-w-2xl max-h-[calc(100vh-165px)] overflow-y-scroll">
+      <div className={"flex flex-col w-full"}>
+        <Dialog open={open} onOpenChange={setOpen}>
+          {/*<DialogTrigger asChild>*/}
+          {/*  <Button>*/}
+          {/*    <SendHorizontal />*/}
+          {/*  </Button>*/}
+          {/*</DialogTrigger>*/}
+          <DialogContent>
             <DialogHeader>
-              <DialogTitle>Buat Postingan Baru</DialogTitle>
-            </DialogHeader>
-            <div className="flex flex-col gap-4 mt-4">
-              <textarea
-                onChange={(e) => {
-                  setCaption(e.target.value);
-                }}
-                className="border rounded-lg p-3 w-full text-sm focus:outline-none focus:ring focus:ring-blue-200"
-                placeholder="Tulis sesuatu di sini..."
-                rows="5"
-              ></textarea>
-
-              <section className="container">
-                <div
-                  {...getRootProps({ className: "dropzone" })}
-                  className="border-2 border-dashed p-10 flex justify-center rounded-lg"
-                >
-                  <input {...getInputProps()} />
-                  <p>Geser gambar anda ke sini!</p>
+              <DialogTitle className="text-center">
+                Masuk atau Buat Akun Sekarang!
+              </DialogTitle>
+              <DialogDescription>
+                <div className="flex justify-center flex-col w-full items-center mt-5 gap-3">
+                  <div className="border w-24 h-24 rounded-full flex items-center justify-center text-4xl">
+                    <KeyRound />
+                  </div>
+                  <p>
+                    Kamu tidak bisa melakukan aksi ini karena belum masuk. Ayooo
+                    masuk sekarang juga!!
+                  </p>
+                  <div className="flex w-full gap-3 mt-3">
+                    <Button asChild className="flex-1">
+                      <Link to="/login">Login</Link>
+                    </Button>
+                    <Button asChild className="flex-1">
+                      <Link to="/register">Register</Link>
+                    </Button>
+                  </div>
                 </div>
-                {error && (
-                  <p className="text-red-500 mt-2">{error}</p> // Menampilkan pesan error
-                )}
-                <aside className="mt-3">
-                  <h4 className="font-bold">Files</h4>
-                  <ul className="mt-3 flex flex-col gap-3">{files}</ul>
-                </aside>
-              </section>
-
-              <div className="flex justify-end items-center mt-4">
-                <Button onClick={handleUpload} disabled={postDisabled}>
-                  <SendHorizontal className="mr-2" />
-                  Post
-                </Button>
-              </div>
-            </div>
+              </DialogDescription>
+            </DialogHeader>
           </DialogContent>
         </Dialog>
+        <h3 className="font-bold text-lg">Buat Postingan Baru</h3>
+        <div className="flex gap-3 items-center">
+          <Avatar>
+            <AvatarImage src={`${apiUrl}/${userData.profile_pict}`} />
+            <AvatarFallback>{getUserInitials(userData.name)}</AvatarFallback>
+          </Avatar>
+          <Dialog>
+            <DialogTrigger className={"mt-5"} asChild>
+              <Textarea
+                type="text"
+                rows={4}
+                placeholder={`Apa yang Anda pikirkan, ${localStorage.getItem("name")}?`}
+                className="cursor-pointer"
+              />
+            </DialogTrigger>
+
+            <DialogContent className="sm:max-w-2xl max-h-[calc(100vh-165px)] overflow-y-scroll">
+              <DialogHeader>
+                <DialogTitle>Buat Postingan Baru</DialogTitle>
+              </DialogHeader>
+              <div className="flex flex-col gap-4 mt-4">
+                <textarea
+                  onChange={(e) => {
+                    setCaption(e.target.value);
+                  }}
+                  className="border rounded-lg p-3 w-full text-sm focus:outline-none focus:ring focus:ring-blue-200"
+                  placeholder="Tulis sesuatu di sini..."
+                  rows="5"
+                ></textarea>
+
+                <section className="container">
+                  <div
+                    {...getRootProps({ className: "dropzone" })}
+                    className="border-2 border-dashed p-10 flex justify-center rounded-lg"
+                  >
+                    <input {...getInputProps()} />
+                    <p>Geser gambar anda ke sini!</p>
+                  </div>
+                  {error && (
+                    <p className="text-red-500 mt-2">{error}</p> // Menampilkan pesan error
+                  )}
+                  <aside className="mt-3">
+                    <h4 className="font-bold">Files</h4>
+                    <ul className="mt-3 flex flex-col gap-3">{files}</ul>
+                  </aside>
+                </section>
+
+                <div className="flex justify-end items-center mt-4">
+                  <Button onClick={handleUpload} disabled={postDisabled}>
+                    <SendHorizontal className="mr-2" />
+                    Post
+                  </Button>
+                </div>
+              </div>
+            </DialogContent>
+          </Dialog>
+        </div>
       </div>
     </div>
   );

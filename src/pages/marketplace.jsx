@@ -93,7 +93,7 @@ export default function Marketplace() {
     >
       <div
         className={
-          "w-full min-h-[120px] border rounded-2xl py-5 px-5 xl:px-48 text-xl flex justify-between items-center"
+          "w-full min-h-[120px] border rounded-2xl py-5 px-5 xl:px-48 text-xl flex justify-between items-center bg-white  "
         }
       >
         <div className={"flex flex-col items-start"}>

@@ -54,7 +54,7 @@ export default function ItemDetail() {
   };
 
   return (
-    <div className="flex w-full justify-center px-4">
+    <div className="flex w-full justify-center px-4 bg-white rounded-lg">
       <div className="flex flex-col md:flex-row w-full overflow-hidden">
         <div className="w-full md:w-1/2 p-4 md:p-8">
           <img

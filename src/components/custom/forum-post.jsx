@@ -236,7 +236,7 @@ export default function ForumPost(props) {
   };
 
   return (
-    <div className="flex flex-col border shadow-sm w-full max-w-2xl rounded-lg p-5 gap-5">
+    <div className="flex flex-col border shadow-sm w-full max-w-2xl rounded-lg p-5 gap-5 bg-white">
       <div id="post-header" className="flex justify-between">
         <div className={"flex gap-3 items-center"}>
           <Avatar>
@@ -276,25 +276,25 @@ export default function ForumPost(props) {
                     <DialogTitle>Buat Postingan Baru</DialogTitle>
                   </DialogHeader>
                   <div className="flex flex-col gap-4 mt-4">
-                      <textarea
-                          // onChange={(e) => {
-                          //   setCaption(e.target.value);
-                          // }}
-                          className="border rounded-lg p-3 w-full text-sm focus:outline-none focus:ring focus:ring-blue-200"
-                          placeholder="Tulis sesuatu di sini..."
-                          rows="5"
-                      ></textarea>
+                    <textarea
+                      // onChange={(e) => {
+                      //   setCaption(e.target.value);
+                      // }}
+                      className="border rounded-lg p-3 w-full text-sm focus:outline-none focus:ring focus:ring-blue-200"
+                      placeholder="Tulis sesuatu di sini..."
+                      rows="5"
+                    ></textarea>
 
                     <section className="container">
                       <div
-                          {...getRootProps({ className: "dropzone" })}
-                          className="border-2 border-dashed p-10 flex justify-center rounded-lg"
+                        {...getRootProps({ className: "dropzone" })}
+                        className="border-2 border-dashed p-10 flex justify-center rounded-lg"
                       >
                         <input {...getInputProps()} />
                         <p>Geser gambar anda ke sini!</p>
                       </div>
                       {error && (
-                          <p className="text-red-500 mt-2">{error}</p> // Menampilkan pesan error
+                        <p className="text-red-500 mt-2">{error}</p> // Menampilkan pesan error
                       )}
                       <aside className="mt-3">
                         <h4 className="font-bold">Files</h4>
@@ -304,8 +304,8 @@ export default function ForumPost(props) {
 
                     <div className="flex justify-end items-center mt-4">
                       <Button
-                          // onClick={handleUpload}
-                          disabled={postDisabled}
+                        // onClick={handleUpload}
+                        disabled={postDisabled}
                       >
                         <SendHorizontal className="mr-2" />
                         Post
