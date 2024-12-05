@@ -36,11 +36,11 @@ const data = {
       url: "/weather",
       icon: Cloud,
     },
-    {
-      title: "Komunitas",
-      url: "/community",
-      icon: Users,
-    },
+    // {
+    //   title: "Komunitas",
+    //   url: "/community",
+    //   icon: Users,
+    // },
   ],
 };
 
