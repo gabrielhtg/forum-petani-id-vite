@@ -1,7 +1,6 @@
 import { useCallback, useState } from "react";
 import { useDropzone } from "react-dropzone";
 import { Avatar, AvatarImage, AvatarFallback } from "@/components/ui/avatar";
-import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
   Dialog,
