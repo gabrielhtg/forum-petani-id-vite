@@ -14,7 +14,6 @@ import { Save, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getUserInitials } from "@/services/getUserInitials.js";
 import { toast } from "@/hooks/use-toast.js";
-import { Toaster } from "@/components/ui/toaster.jsx";
 import { setUserData } from "@/services/userDataSlice.js";
 import { useDispatch } from "react-redux";
 
@@ -215,7 +214,6 @@ export default function EditProfilePage() {
           </Link>
         </Button>
       </div>
-      <Toaster />
     </div>
   );
 }

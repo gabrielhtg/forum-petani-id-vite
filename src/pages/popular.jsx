@@ -4,9 +4,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import { apiUrl } from "@/env.js";
 import { setPosts } from "@/services/postsSlice.js";
-import CreatePost from "@/components/custom/create-post.jsx";
 import ForumPost from "@/components/custom/forum-post.jsx";
-import { Toaster } from "@/components/ui/toaster.jsx";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -66,8 +64,6 @@ export default function HomePage() {
           Belum ada postingan tersedia!
         </div>
       )}
-
-      <Toaster />
     </div>
   );
 }

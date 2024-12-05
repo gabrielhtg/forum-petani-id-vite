@@ -17,7 +17,6 @@ import { Textarea } from "@/components/ui/textarea.jsx";
 import axios from "axios";
 import { apiUrl } from "@/env.js";
 import { useToast } from "@/hooks/use-toast.js";
-import { Toaster } from "@/components/ui/toaster.jsx";
 import { useEffect, useState } from "react";
 import { formatRupiah } from "@/services/format-rupiah.js";
 import { ProductsSkeleton } from "@/components/custom/products-skeleton.jsx";
@@ -280,8 +279,6 @@ export default function Marketplace() {
           <ProductsSkeleton />
         </>
       )}
-
-      <Toaster />
     </div>
   );
 }

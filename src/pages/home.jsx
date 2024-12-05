@@ -6,7 +6,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "@/services/postsSlice.js";
-import { Toaster } from "@/components/ui/toaster.jsx";
 
 export default function HomePage() {
   const navigate = useNavigate();
@@ -67,8 +66,6 @@ export default function HomePage() {
           Belum ada postingan tersedia!
         </div>
       )}
-
-      <Toaster />
     </div>
   );
 }

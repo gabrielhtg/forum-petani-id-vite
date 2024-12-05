@@ -4,7 +4,6 @@ import { Truncate } from "@re-dev/react-truncate";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { apiUrl } from "@/env.js";
-import { Toaster } from "@/components/ui/toaster.jsx";
 import { useEffect, useState } from "react";
 import { formatRupiah } from "@/services/format-rupiah.js";
 
@@ -112,8 +111,6 @@ export default function YourProduct() {
           Belum ada produk tersedia!
         </div>
       )}
-
-      <Toaster />
     </div>
   );
 }

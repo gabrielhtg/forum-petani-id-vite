@@ -5,7 +5,6 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 import { setPosts } from "@/services/postsSlice.js";
-import { Toaster } from "@/components/ui/toaster.jsx";
 
 export default function YourPost() {
   const navigate = useNavigate();
@@ -48,7 +47,7 @@ export default function YourPost() {
     };
 
     fetchPosts().then();
-  }, [dispatch, navigate]);
+  }, [dispatch, navigate, username]);
 
   return (
     <div className="flex w-full flex-col items-center gap-5">
@@ -70,8 +69,6 @@ export default function YourPost() {
           Belum ada postingan tersedia!
         </div>
       )}
-
-      <Toaster />
     </div>
   );
 }
