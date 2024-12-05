@@ -13,6 +13,7 @@ import { Input } from "@/components/ui/input.jsx";
 import { Save, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getUserInitials } from "@/services/getUserInitials.js";
+import { toast } from "@/hooks/use-toast.js";
 
 export default function EditProfilePage() {
   const [currentUser, setCurrentUser] = useState("");
@@ -23,7 +24,7 @@ export default function EditProfilePage() {
   const [pekerjaan, setPekerjaan] = useState("");
   const [nama, setNama] = useState("");
   const [profilePict, setProfilePict] = useState(null);
-  const [linkGambar, setLinkGambar] = useState("https://github.com/shadcn.png");
+  const [picture, setPicture] = useState(null);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -52,6 +53,7 @@ export default function EditProfilePage() {
     fetchUserData().then();
   }, [
     currentUser.email,
+    currentUser.foto_profil,
     currentUser.name,
     currentUser.nomor_telepon,
     currentUser.pekerjaan,
@@ -61,10 +63,34 @@ export default function EditProfilePage() {
     currentUsername,
   ]);
 
-  const changeImage = () => {
-    const file = event.target.files[0];
-    if (file) {
-      setProfilePict(URL.createObjectURL(file));
+  const handleSubmit = async () => {
+    const formData = new FormData();
+    formData.append("name", nama);
+    formData.append("username", username);
+    formData.append("email", email);
+    formData.append("nomor_telepon", nomorTelepon);
+    formData.append("pekerjaan", pekerjaan);
+    formData.append("picture", picture);
+
+    try {
+      const response = await axios.put(`${apiUrl}/api/users`, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+
+      console.log(response.data);
+      toast({
+        title: "Success",
+        description: "Berhasil diperbarui!",
+      });
+    } catch (error) {
+      console.error("Error updating profile:", error.response.data);
+      toast({
+        title: "Success",
+        description: "Berhasil dipost!",
+      });
     }
   };
 
@@ -80,17 +106,19 @@ export default function EditProfilePage() {
       </Avatar>
 
       <div className={"flex flex-col w-full max-w-lg"}>
-        <Input className={"w-full"} onChange={changeImage} type={"file"} />
+        <Input
+          className={"w-full"}
+          onChange={(e) => {
+            setProfilePict(URL.createObjectURL(e.target.files[0]));
+            setPicture(e.target.files[0]);
+          }}
+          type={"file"}
+        />
         <span className={"text-xs ms-2 text-yellow-600"}>
           *Direkomendasikan untuk menggunakan gambar dengan ukuran 1:1 dan &lt;=
           2MB.
         </span>
       </div>
-
-      {/*<div className={"flex flex-col text-center gap-3"}>*/}
-      {/*  <span className={"font-bold text-4xl"}>Gabriel Cesar Hutagalung</span>*/}
-      {/*  <span className={"text-2xl"}>{currentUser.pekerjaan}</span>*/}
-      {/*</div>*/}
 
       <div className={"max-w-xl w-full"}>
         <Table>
@@ -98,31 +126,51 @@ export default function EditProfilePage() {
             <TableRow>
               <TableCell className={"font-bold"}>Email</TableCell>
               <TableCell>
-                <Input value={email} type={"email"} />
+                <Input
+                  value={email}
+                  type={"email"}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className={"font-bold"}>Nama</TableCell>
               <TableCell>
-                <Input value={nama} type={"type"} />
+                <Input
+                  value={nama}
+                  type={"text"}
+                  onChange={(e) => setNama(e.target.value)}
+                />
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className={"font-bold lg:w-32"}>Username</TableCell>
               <TableCell>
-                <Input value={username} type={"text"} />
+                <Input
+                  value={username}
+                  type={"text"}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className={"font-bold"}>Nomor Telepon</TableCell>
               <TableCell>
-                <Input value={nomorTelepon} type={"type"} />
+                <Input
+                  value={nomorTelepon}
+                  type={"text"}
+                  onChange={(e) => setEmail(e.target.value)}
+                />
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className={"font-bold"}>Pekerjaan</TableCell>
               <TableCell>
-                <Input value={pekerjaan} type={"type"} />
+                <Input
+                  value={pekerjaan}
+                  type={"text"}
+                  onChange={(e) => setPekerjaan(e.target.value)}
+                />
               </TableCell>
             </TableRow>
             <TableRow>
@@ -145,7 +193,7 @@ export default function EditProfilePage() {
       </div>
 
       <div className={"flex gap-3"}>
-        <Button>
+        <Button onClick={handleSubmit}>
           <Save /> Save
         </Button>
         <Button variant={"secondary"} asChild={true}>

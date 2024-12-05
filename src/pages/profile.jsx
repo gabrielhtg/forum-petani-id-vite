@@ -11,6 +11,7 @@ import { apiUrl } from "@/env.js";
 import { formatProfileDate } from "@/services/formatProfileDate.js";
 import { Link } from "react-router-dom";
 import { Pencil } from "lucide-react";
+import { getUserInitials } from "@/services/getUserInitials.js";
 
 export default function ProfilePage() {
   const [currentUser, setCurrentUser] = useState("");
@@ -29,6 +30,7 @@ export default function ProfilePage() {
         );
 
         setCurrentUser(response.data.data[0]);
+        console.log(`${apiUrl}/${currentUser.foto_profil}`);
       } catch (err) {
         console.log(err);
       }
@@ -44,8 +46,8 @@ export default function ProfilePage() {
       }
     >
       <Avatar className={"w-24 h-24 md:w-60 md:h-60"}>
-        <AvatarImage src="https://github.com/shadcn.png" />
-        <AvatarFallback>CN</AvatarFallback>
+        <AvatarImage src={`${apiUrl}/${currentUser.foto_profil}`} />
+        <AvatarFallback>{getUserInitials(currentUser.name)}</AvatarFallback>
       </Avatar>
 
       <span className={"font-bold text-xl md:text-4xl"}>

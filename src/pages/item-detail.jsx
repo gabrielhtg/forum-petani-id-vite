@@ -29,7 +29,7 @@ export default function ItemDetail() {
     };
 
     fetchProducts().then();
-  }, []);
+  }, [id]);
 
   if (!product) return <p>Item tidak ditemukan</p>;
 
