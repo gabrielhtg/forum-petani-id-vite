@@ -78,8 +78,10 @@ export default function SidebarNavbar() {
                   </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem>
-                  {" "}
-                  <ShoppingBasket /> Produk Anda
+                  <Link to={"/your-product"}>
+                    {" "}
+                    <ShoppingBasket /> Produk Anda
+                  </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem asChild={true}>
                   <Link to={"/your-post"}>

@@ -16,6 +16,7 @@ import { Provider } from "react-redux";
 import store from "./store.js";
 import YourPost from "@/pages/your-post.jsx";
 import EditProfilePage from "@/pages/profile-edit.jsx";
+import YourProduct from "@/pages/your-product.jsx";
 // import KomunitasPage from "@/pages/komunitas.jsx";
 
 const router = createBrowserRouter([
@@ -62,6 +63,11 @@ const router = createBrowserRouter([
         path: "your-post",
         title: "Your Posts",
         element: <YourPost />,
+      },
+      {
+        path: "your-product",
+        title: "Your Products",
+        element: <YourProduct />,
       },
       // {
       //     path: 'komunitas',
