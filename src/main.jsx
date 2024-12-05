@@ -15,6 +15,7 @@ import PopularPage from "@/pages/popular.jsx";
 import { Provider } from "react-redux";
 import store from "./store.js";
 import YourPost from "@/pages/your-post.jsx";
+import EditProfilePage from "@/pages/profile-edit.jsx";
 // import KomunitasPage from "@/pages/komunitas.jsx";
 
 const router = createBrowserRouter([
@@ -38,14 +39,19 @@ const router = createBrowserRouter([
         element: <WeatherPage />,
       },
       {
-        path: "marketplace/:id", // route dinamis untuk halaman detail
+        path: "marketplace/:id",
         title: "Item Detail",
         element: <ItemDetail />,
       },
       {
-        path: "profile", // Tambahkan path ini untuk halaman profile
+        path: "profile",
         title: "Profile",
         element: <ProfilePage />,
+      },
+      {
+        path: "profile/edit",
+        title: "Edit Profile",
+        element: <EditProfilePage />,
       },
       {
         path: "popular",
@@ -73,7 +79,7 @@ const router = createBrowserRouter([
     element: <RegisterPage />,
   },
   {
-    path: "/forgot-password", // Tambahkan rute lupa sandi di sini
+    path: "/forgot-password",
     element: <ForgotPasswordPage />,
   },
 ]);

@@ -19,8 +19,6 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.jsx";
 import { useDispatch } from "react-redux";
@@ -33,31 +31,14 @@ export default function SidebarNavbar() {
     localStorage.getItem("username"),
   );
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     localStorage.clear();
     dispatch(notLoggedIn());
     setIsUsernameExist(localStorage.getItem("username"));
+    navigate("/");
   };
-
-  // useEffect(() => {
-  //     const fetchUserData = async () => {
-  //         try {
-  //             const response = await axios.get(`${apiUrl}/api/users`, {
-  //                 headers: {
-  //                     Authorization: `Bearer ${localStorage.getItem('token')}`,
-  //                 }
-  //             })
-  //
-  //             setUserData(response.data.data[0])
-  //             // eslint-disable-next-line no-unused-vars
-  //         } catch (err) {
-  //             // do nothin
-  //         }
-  //     }
-  //
-  //     fetchUserData().then()
-  // })
 
   return (
     <SidebarProvider>
