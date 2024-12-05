@@ -20,6 +20,8 @@ import { useToast } from "@/hooks/use-toast.js";
 import { Toaster } from "@/components/ui/toaster.jsx";
 import { useEffect, useState } from "react";
 import { formatRupiah } from "@/services/format-rupiah.js";
+import { ProductsSkeleton } from "@/components/custom/products-skeleton.jsx";
+import { Skeleton } from "@/components/ui/skeleton.jsx";
 
 export default function Marketplace() {
   const navigate = useNavigate();
@@ -31,6 +33,8 @@ export default function Marketplace() {
   const [lokasi, setLokasi] = useState("");
   const [whatsappNumber, setWhatsappNumber] = useState("");
   const [products, setProducts] = useState([]);
+  const [showProducts, setShowProducts] = useState(false);
+  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleCardClick = (id) => {
     navigate(`/marketplace/${id}`);
@@ -45,6 +49,8 @@ export default function Marketplace() {
           },
         });
         setProducts(response.data.data);
+
+        setShowProducts(true);
       } catch (err) {
         console.log(err);
       }
@@ -195,60 +201,86 @@ export default function Marketplace() {
           </Dialog>
         </div>
 
-        <img
-          className={"w-36 lg:w-52 xl:w-72 md"}
-          src={"src/assets/marketplace/asset1.jpg"}
-          alt={"logo"}
-        />
+        <div className="relative">
+          {!imageLoaded && (
+            <Skeleton
+              className={"w-36 lg:w-52 xl:w-72 aspect-square rounded-full"}
+            />
+          )}
+
+          <img
+            className={"w-36 lg:w-52 xl:w-72"}
+            src={"src/assets/marketplace/asset1.jpg"}
+            alt={"logo"}
+            onLoad={() => setImageLoaded(true)}
+            style={{ display: imageLoaded ? "block" : "none" }}
+          />
+        </div>
       </div>
 
-      {products.map((item, index) => (
-        <Card
-          key={index}
-          className={
-            "flex flex-col w-[150px] md:w-full max-w-[250px] p-5 gap-3"
-          }
-          onClick={() => handleCardClick(item.id)}
-        >
-          <div>
-            <img
-              className={"w-full aspect-square object-cover"}
-              src={`${apiUrl}/${item.picture}`}
-              alt={"petani"}
-              width={500}
-              height={500}
-              loading={"lazy"}
-            />
-          </div>
+      {showProducts ? (
+        products.map((item, index) => (
+          <Card
+            key={index}
+            className={
+              "flex flex-col w-[150px] md:w-full max-w-[250px] p-5 gap-3"
+            }
+            onClick={() => handleCardClick(item.id)}
+          >
+            <div>
+              <img
+                className={"w-full aspect-square object-cover"}
+                src={`${apiUrl}/${item.picture}`}
+                alt={"petani"}
+                width={500}
+                height={500}
+                loading={"lazy"}
+              />
+            </div>
 
-          <div className={"flex flex-col"}>
-            <Truncate
-              lines={1}
-              ellipsis={<span>...</span>}
-              onTruncate={(didTruncate) => {
-                console.log(didTruncate);
-              }}
-            >
-              <span className={"text-gray-500 font-extralight"}>
-                {" "}
-                {item.nama}
+            <div className={"flex flex-col"}>
+              <Truncate
+                lines={1}
+                ellipsis={<span>...</span>}
+                onTruncate={(didTruncate) => {
+                  console.log(didTruncate);
+                }}
+              >
+                <span className={"text-gray-500 font-extralight"}>
+                  {" "}
+                  {item.nama}
+                </span>
+              </Truncate>
+              <span
+                className={"font-bold text-sm"}
+              >{`${formatRupiah(item.harga)},-`}</span>
+            </div>
+
+            <div>
+              <span className={"text-gray-500 text-sm flex items-center gap-1"}>
+                <MapPin size={16} /> {item.lokasi}
               </span>
-            </Truncate>
-            <span
-              className={"font-bold text-sm"}
-            >{`${formatRupiah(item.harga)},-`}</span>
-          </div>
+            </div>
+          </Card>
+        ))
+      ) : (
+        <>
+          <ProductsSkeleton />
+          <ProductsSkeleton />
+          <ProductsSkeleton />
+          <ProductsSkeleton />
+          <ProductsSkeleton />
+          <ProductsSkeleton />
+          <ProductsSkeleton />
+          <ProductsSkeleton />
+          <ProductsSkeleton />
+          <ProductsSkeleton />
+          <ProductsSkeleton />
+          <ProductsSkeleton />
+          <ProductsSkeleton />
+        </>
+      )}
 
-          <div>
-            {/*<Button className={"text-xs flex gap-1"}>*/}
-            {/*  <Phone size={6}/> Chat <span className={"hidden md:flex"}>Penjual</span>*/}
-            {/*</Button>*/}
-            <span className={"text-gray-500 text-sm flex items-center gap-1"}>
-              <MapPin size={16} /> {item.lokasi}
-            </span>
-          </div>
-        </Card>
-      ))}
       <Toaster />
     </div>
   );
