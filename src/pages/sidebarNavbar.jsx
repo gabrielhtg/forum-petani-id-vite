@@ -77,7 +77,7 @@ export default function SidebarNavbar() {
                     <User /> Profil
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
+                <DropdownMenuItem asChild={true}>
                   <Link to={"/your-product"}>
                     {" "}
                     <ShoppingBasket /> Produk Anda

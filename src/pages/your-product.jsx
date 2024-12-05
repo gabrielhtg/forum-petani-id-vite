@@ -1,5 +1,4 @@
 import { Card } from "@/components/ui/card.jsx";
-import { Button } from "@/components/ui/button.jsx";
 import { MapPin } from "lucide-react";
 import { Truncate } from "@re-dev/react-truncate";
 import { useNavigate } from "react-router-dom";
@@ -7,12 +6,10 @@ import axios from "axios";
 import { apiUrl } from "@/env.js";
 import { Toaster } from "@/components/ui/toaster.jsx";
 import { useEffect, useState } from "react";
-import { useToast } from "@/hooks/use-toast.js";
 import { formatRupiah } from "@/services/format-rupiah.js";
 
 export default function YourProduct() {
   const navigate = useNavigate();
-  const { toast } = useToast();
   const [products, setProducts] = useState([]);
   const username = localStorage.getItem("username");
 
