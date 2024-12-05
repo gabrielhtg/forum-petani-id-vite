@@ -3,7 +3,9 @@ import { createSlice } from "@reduxjs/toolkit";
 export const userDataSlice = createSlice({
   name: "userData",
   initialState: {
-    value: null,
+    value: {
+      foto_profil: "https://github.com/shadcn.png",
+    },
   },
   reducers: {
     setUserData: (state, action) => {

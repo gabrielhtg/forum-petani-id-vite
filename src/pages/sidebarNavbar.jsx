@@ -24,6 +24,8 @@ import {
 import { useDispatch, useSelector } from "react-redux";
 import { notLoggedIn } from "@/services/isLoginSlice.js";
 import { getUserInitials } from "@/services/getUserInitials.js";
+import { setUserData } from "@/services/userDataSlice.js";
+import { Toaster } from "@/components/ui/toaster.jsx";
 
 export default function SidebarNavbar() {
   const userData = useSelector((state) => state.userData.value);
@@ -39,6 +41,23 @@ export default function SidebarNavbar() {
     setIsUsernameExist(localStorage.getItem("username"));
     navigate("/");
   };
+
+  useEffect(() => {
+    const getUserData = async () => {
+      const responseGetUser = await axios.get(
+        `${apiUrl}/api/users/${localStorage.getItem("username")}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+
+      dispatch(setUserData(responseGetUser.data.data[0]));
+    };
+
+    getUserData().then();
+  }, [dispatch]);
 
   return (
     <SidebarProvider>
@@ -110,6 +129,7 @@ export default function SidebarNavbar() {
           {/*    <div className="aspect-video rounded-xl bg-muted/50"/>*/}
           {/*</div>*/}
           {/*<div className="min-h-[100vh] flex-1 rounded-xl bg-muted/50 md:min-h-min"/>*/}
+          <Toaster />
         </div>
       </SidebarInset>
     </SidebarProvider>
