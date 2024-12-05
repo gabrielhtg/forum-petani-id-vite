@@ -21,12 +21,12 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.jsx";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { notLoggedIn } from "@/services/isLoginSlice.js";
 import { getUserInitials } from "@/services/getUserInitials.js";
 
 export default function SidebarNavbar() {
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  const userData = useSelector((state) => state.userData.value);
   const [isUsernameExist, setIsUsernameExist] = useState(
     localStorage.getItem("username"),
   );

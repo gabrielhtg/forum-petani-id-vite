@@ -15,7 +15,7 @@ import axios from "axios";
 import { apiUrl } from "@/env.js";
 import { getUserInitials } from "@/services/getUserInitials.js";
 import { setPosts } from "@/services/postsSlice.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { toast } from "@/hooks/use-toast.js";
 import { Link } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea.jsx";
@@ -24,7 +24,8 @@ export default function CreatePost() {
   const [images, setImages] = useState([]);
   const [error, setError] = useState("");
   const [caption, setCaption] = useState("");
-  const userData = JSON.parse(localStorage.getItem("userData"));
+  // const userData = JSON.parse(localStorage.getItem("userData"));
+  const userData = useSelector((state) => state.userData.value);
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [postDisabled, setPostDisabled] = useState(false);
@@ -195,7 +196,7 @@ export default function CreatePost() {
         <h3 className="font-bold text-lg">Buat Postingan Baru</h3>
         <div className="flex gap-3 items-center">
           <Avatar>
-            <AvatarImage src={`${apiUrl}/${userData.profile_pict}`} />
+            <AvatarImage src={`${apiUrl}/${userData.foto_profil}`} />
             <AvatarFallback>{getUserInitials(userData.name)}</AvatarFallback>
           </Avatar>
           <Dialog>

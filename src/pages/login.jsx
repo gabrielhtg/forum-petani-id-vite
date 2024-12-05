@@ -16,6 +16,7 @@ import { useToast } from "@/hooks/use-toast.js";
 import { Toaster } from "@/components/ui/toaster.jsx";
 import { useDispatch } from "react-redux";
 import { loggedIn } from "@/services/isLoginSlice.js";
+import { setUserData } from "@/services/userDataSlice.js";
 
 export default function LoginPage() {
   const [username, setUsername] = useState("");
@@ -45,11 +46,7 @@ export default function LoginPage() {
         },
       );
 
-      localStorage.setItem(
-        "userData",
-        JSON.stringify(responseGetUser.data.data[0]),
-      );
-
+      dispatch(setUserData(responseGetUser.data.data[0]));
       navigate("/");
     } catch (error) {
       toast({

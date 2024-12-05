@@ -84,7 +84,11 @@ export default function WeatherPage() {
   }, [namaKota]);
 
   return (
-    <div className={"flex flex-col gap-5"}>
+    <div
+      className={
+        "flex flex-col gap-5 bg-white p-5 rounded-lg h-[calc(100vh-100px)]"
+      }
+    >
       <Dialog>
         <DialogTrigger>
           <Button variant={"secondary"} className={"flex gap-1"}>

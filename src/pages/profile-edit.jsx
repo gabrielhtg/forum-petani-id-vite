@@ -15,6 +15,8 @@ import { Link } from "react-router-dom";
 import { getUserInitials } from "@/services/getUserInitials.js";
 import { toast } from "@/hooks/use-toast.js";
 import { Toaster } from "@/components/ui/toaster.jsx";
+import { setUserData } from "@/services/userDataSlice.js";
+import { useDispatch } from "react-redux";
 
 export default function EditProfilePage() {
   const [currentUser, setCurrentUser] = useState("");
@@ -26,6 +28,7 @@ export default function EditProfilePage() {
   const [nama, setNama] = useState("");
   const [profilePict, setProfilePict] = useState(null);
   const [picture, setPicture] = useState(null);
+  const dispatch = useDispatch();
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -74,14 +77,23 @@ export default function EditProfilePage() {
     formData.append("picture", picture);
 
     try {
-      const response = await axios.put(`${apiUrl}/api/users`, formData, {
+      await axios.put(`${apiUrl}/api/users`, formData, {
         headers: {
           "Content-Type": "multipart/form-data",
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
       });
 
-      console.log(response.data);
+      const responseGetUser = await axios.get(
+        `${apiUrl}/api/users/${username}`,
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+
+      dispatch(setUserData(responseGetUser.data.data[0]));
       toast({
         title: "Success",
         description: "Berhasil diperbarui!",
