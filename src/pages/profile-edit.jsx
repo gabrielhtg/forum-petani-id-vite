@@ -14,6 +14,7 @@ import { Save, ArrowLeft } from "lucide-react";
 import { Link } from "react-router-dom";
 import { getUserInitials } from "@/services/getUserInitials.js";
 import { toast } from "@/hooks/use-toast.js";
+import { Toaster } from "@/components/ui/toaster.jsx";
 
 export default function EditProfilePage() {
   const [currentUser, setCurrentUser] = useState("");
@@ -44,7 +45,7 @@ export default function EditProfilePage() {
         setNomorTelepon(currentUser.nomor_telepon);
         setPekerjaan(currentUser.pekerjaan);
         setNama(currentUser.name);
-        setProfilePict(currentUser.foto_profil);
+        setProfilePict(`${apiUrl}/${currentUser.foto_profil}`);
       } catch (err) {
         console.log(err);
       }
@@ -97,7 +98,7 @@ export default function EditProfilePage() {
   return (
     <div
       className={
-        "flex flex-col items-center justify-center gap-5 p-5 h-[calc(100vh-100px)] min-h-[calc(100vh-100px)] bg-white rounded-lg"
+        "flex flex-col items-center justify-center gap-5 p-5 min-h-[calc(100vh-100px)] bg-white rounded-lg"
       }
     >
       <Avatar className={"w-24 h-24 md:w-60 md:h-60"}>
@@ -202,6 +203,7 @@ export default function EditProfilePage() {
           </Link>
         </Button>
       </div>
+      <Toaster />
     </div>
   );
 }

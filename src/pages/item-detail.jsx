@@ -14,14 +14,11 @@ export default function ItemDetail() {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get(
-          `http://localhost:3000/api/products/${id}`,
-          {
-            headers: {
-              Authorization: `Bearer ${localStorage.getItem("token")}`,
-            },
+        const response = await axios.get(`${apiUrl}/api/products/${id}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
           },
-        );
+        });
         setProduct(response.data.data[0]);
       } catch (err) {
         console.log(err);
