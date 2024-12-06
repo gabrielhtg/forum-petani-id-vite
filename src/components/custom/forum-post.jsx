@@ -47,7 +47,7 @@ export default function ForumPost(props) {
   const data = props.props;
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
-  const [commentCount] = useState(data.total_comments);
+  const [commentCount, setCommentCount] = useState(data.total_comments);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [content, setContent] = useState("");
@@ -90,6 +90,7 @@ export default function ForumPost(props) {
 
   useEffect(() => {
     setLikeCount(data.total_likes);
+    setCommentCount(data.total_comments);
 
     // Cek apakah pengguna telah like
     const userLiked = data.liked_users.includes(
