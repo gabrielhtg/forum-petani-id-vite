@@ -11,9 +11,12 @@ export const userDataSlice = createSlice({
     setUserData: (state, action) => {
       state.value = action.payload;
     },
+    clearUserData: (state) => {
+      state.value = {};
+    },
   },
 });
 
-export const { setUserData } = userDataSlice.actions;
+export const { setUserData, clearUserData } = userDataSlice.actions;
 
 export default userDataSlice.reducer;

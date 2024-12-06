@@ -12,10 +12,11 @@ import { formatProfileDate } from "@/services/formatProfileDate.js";
 import { Link } from "react-router-dom";
 import { Pencil } from "lucide-react";
 import { getUserInitials } from "@/services/getUserInitials.js";
+import { useSelector } from "react-redux";
 
 export default function ProfilePage() {
   const [currentUser, setCurrentUser] = useState("");
-  const [currentUsername] = useState(localStorage.getItem("username"));
+  const currentUsername = useSelector((state) => state.userData.value.username);
 
   useEffect(() => {
     const fetchUserData = async () => {
@@ -37,7 +38,7 @@ export default function ProfilePage() {
     };
 
     fetchUserData().then();
-  }, [currentUsername]);
+  }, [currentUser.foto_profil, currentUsername]);
 
   return (
     <div

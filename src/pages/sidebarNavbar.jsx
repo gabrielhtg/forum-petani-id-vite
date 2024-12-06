@@ -23,8 +23,9 @@ import {
 } from "@/components/ui/dropdown-menu.jsx";
 import { useDispatch, useSelector } from "react-redux";
 import { getUserInitials } from "@/services/getUserInitials.js";
-import { setUserData } from "@/services/userDataSlice.js";
+import { clearUserData, setUserData } from "@/services/userDataSlice.js";
 import { Toaster } from "@/components/ui/toaster.jsx";
+import { notLoggedIn } from "@/services/isLoginSlice.js";
 
 export default function SidebarNavbar() {
   const userData = useSelector((state) => state.userData.value);
@@ -32,6 +33,9 @@ export default function SidebarNavbar() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    localStorage.clear();
+    dispatch(notLoggedIn());
+    dispatch(clearUserData());
     navigate("/");
   };
 

@@ -19,6 +19,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { toast } from "@/hooks/use-toast.js";
 import { Link } from "react-router-dom";
 import { Textarea } from "@/components/ui/textarea.jsx";
+import Compressor from "compressorjs";
 
 export default function CreatePost() {
   const [images, setImages] = useState([]);
@@ -67,12 +68,12 @@ export default function CreatePost() {
         setPostDisabled(true);
         return false;
       }
-      if (file.size > 3 * 1024 * 1024) {
-        // 2MB
-        setError("Ukuran file maksimal 2MB.");
-        setPostDisabled(true);
-        return false;
-      }
+      // if (file.size > 3 * 1024 * 1024) {
+      //   // 2MB
+      //   setError("Ukuran file maksimal 2MB.");
+      //   setPostDisabled(true);
+      //   return false;
+      // }
       return true;
     });
 
@@ -106,8 +107,25 @@ export default function CreatePost() {
     }
 
     const formData = new FormData();
-    images.forEach((image) => {
-      formData.append("files", image);
+
+    const compressedImages = await Promise.all(
+      images.map((image) => {
+        return new Promise((resolve, reject) => {
+          new Compressor(image, {
+            quality: 0.3,
+            success(res) {
+              resolve(res);
+            },
+            error(err) {
+              reject(err);
+            },
+          });
+        });
+      }),
+    );
+
+    compressedImages.forEach((compressedImage) => {
+      formData.append("files", compressedImage);
     });
 
     formData.append("caption", caption);

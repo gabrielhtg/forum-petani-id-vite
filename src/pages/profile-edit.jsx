@@ -15,11 +15,11 @@ import { Link } from "react-router-dom";
 import { getUserInitials } from "@/services/getUserInitials.js";
 import { toast } from "@/hooks/use-toast.js";
 import { setUserData } from "@/services/userDataSlice.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 export default function EditProfilePage() {
   const [currentUser, setCurrentUser] = useState("");
-  const [currentUsername] = useState(localStorage.getItem("username"));
+  const currentUsername = useSelector((state) => state.userData.value.username);
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [nomorTelepon, setNomorTelepon] = useState("");
@@ -74,6 +74,7 @@ export default function EditProfilePage() {
     formData.append("nomor_telepon", nomorTelepon);
     formData.append("pekerjaan", pekerjaan);
     formData.append("picture", picture);
+    formData.append("current_username", currentUsername);
 
     try {
       await axios.put(`${apiUrl}/api/users`, formData, {
