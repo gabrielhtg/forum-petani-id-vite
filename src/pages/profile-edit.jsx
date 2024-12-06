@@ -98,10 +98,10 @@ export default function EditProfilePage() {
         description: "Berhasil diperbarui!",
       });
     } catch (error) {
-      console.error("Error updating profile:", error.response.data);
       toast({
-        title: "Success",
-        description: "Berhasil dipost!",
+        variant: "destructive",
+        title: "Oppps...",
+        description: `${error.response.data.data}`,
       });
     }
   };

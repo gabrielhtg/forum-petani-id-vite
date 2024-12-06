@@ -6,7 +6,7 @@ import {
 import { AppSidebar } from "@/components/app-sidebar.jsx";
 import { Link, Outlet, useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button.jsx";
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import axios from "axios";
 import { apiUrl } from "@/env.js";
 import { LogOut, User, ShoppingBasket, PanelTop } from "lucide-react";
@@ -22,23 +22,16 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.jsx";
 import { useDispatch, useSelector } from "react-redux";
-import { notLoggedIn } from "@/services/isLoginSlice.js";
 import { getUserInitials } from "@/services/getUserInitials.js";
 import { setUserData } from "@/services/userDataSlice.js";
 import { Toaster } from "@/components/ui/toaster.jsx";
 
 export default function SidebarNavbar() {
   const userData = useSelector((state) => state.userData.value);
-  const [isUsernameExist, setIsUsernameExist] = useState(
-    localStorage.getItem("username"),
-  );
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    localStorage.clear();
-    dispatch(notLoggedIn());
-    setIsUsernameExist(localStorage.getItem("username"));
     navigate("/");
   };
 
@@ -79,7 +72,7 @@ export default function SidebarNavbar() {
           {/*        </BreadcrumbItem>*/}
           {/*    </BreadcrumbList>*/}
           {/*</Breadcrumb>*/}
-          {isUsernameExist ? (
+          {userData.username ? (
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Avatar>
