@@ -47,7 +47,10 @@ export default function ProfilePage() {
       }
     >
       <Avatar className={"w-24 h-24 md:w-60 md:h-60"}>
-        <AvatarImage src={`${apiUrl}/${currentUser.foto_profil}`} />
+        <AvatarImage
+          className={"object-cover"}
+          src={`${apiUrl}/${currentUser.foto_profil}`}
+        />
         <AvatarFallback>{getUserInitials(currentUser.name)}</AvatarFallback>
       </Avatar>
 

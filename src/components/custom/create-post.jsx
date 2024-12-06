@@ -214,7 +214,10 @@ export default function CreatePost() {
         <h3 className="font-bold text-lg">Buat Postingan Baru</h3>
         <div className="flex gap-3 items-center">
           <Avatar>
-            <AvatarImage src={`${apiUrl}/${userData.foto_profil}`} />
+            <AvatarImage
+              className={"object-cover"}
+              src={`${apiUrl}/${userData.foto_profil}`}
+            />
             <AvatarFallback>{getUserInitials(userData.name)}</AvatarFallback>
           </Avatar>
           <Dialog>

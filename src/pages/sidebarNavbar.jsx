@@ -80,7 +80,10 @@ export default function SidebarNavbar() {
             <DropdownMenu>
               <DropdownMenuTrigger>
                 <Avatar>
-                  <AvatarImage src={`${apiUrl}/${userData.foto_profil}`} />
+                  <AvatarImage
+                    className={"object-cover"}
+                    src={`${apiUrl}/${userData.foto_profil}`}
+                  />
                   <AvatarFallback>
                     {getUserInitials(userData.name)}
                   </AvatarFallback>

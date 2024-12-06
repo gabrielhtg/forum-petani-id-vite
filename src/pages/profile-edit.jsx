@@ -114,7 +114,7 @@ export default function EditProfilePage() {
       }
     >
       <Avatar className={"w-24 h-24 md:w-60 md:h-60"}>
-        <AvatarImage src={profilePict} />
+        <AvatarImage className={"object-cover"} src={profilePict} />
         <AvatarFallback>{getUserInitials(nama)}</AvatarFallback>
       </Avatar>
 

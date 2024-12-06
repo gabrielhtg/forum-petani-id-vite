@@ -240,11 +240,10 @@ export default function ForumPost(props) {
       <div id="post-header" className="flex justify-between">
         <div className={"flex gap-3 items-center"}>
           <Avatar>
-            {data.foto_profil == null ? (
-              <AvatarImage src={`${apiUrl}/${data.foto_profil}`} />
-            ) : (
-              ""
-            )}
+            <AvatarImage
+              className={"object-cover"}
+              src={`${apiUrl}/${data.foto_profil}`}
+            />
             <AvatarFallback>{getUserInitials(data.name)}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
@@ -376,7 +375,10 @@ export default function ForumPost(props) {
               <div id="post-header" className="flex gap-3 items-center">
                 <Avatar>
                   {data.foto_profil == null ? (
-                    <AvatarImage src={`${apiUrl}/${data.foto_profil}`} />
+                    <AvatarImage
+                      className={"object-cover"}
+                      src={`${apiUrl}/${data.foto_profil}`}
+                    />
                   ) : (
                     ""
                   )}
@@ -451,7 +453,10 @@ export default function ForumPost(props) {
                       className="flex gap-3 items-center mb-2 bg-slate-100 p-3 rounded-lg"
                     >
                       <Avatar>
-                        <AvatarImage src={`${apiUrl}/${data.foto_profil}`} />
+                        <AvatarImage
+                          className={"object-cover"}
+                          src={`${apiUrl}/${data.foto_profil}`}
+                        />
                         <AvatarFallback>
                           {getUserInitials(comment.commenter_name)}
                         </AvatarFallback>
@@ -472,11 +477,10 @@ export default function ForumPost(props) {
 
               <div className="flex gap-3 items-center">
                 <Avatar>
-                  {data.foto_profil == null ? (
-                    <AvatarImage src={`${apiUrl}/${data.foto_profil}`} />
-                  ) : (
-                    ""
-                  )}
+                  <AvatarImage
+                    className={"object-cover"}
+                    src={`${apiUrl}/${data.foto_profil}`}
+                  />
                   <AvatarFallback>{getUserInitials(data.name)}</AvatarFallback>
                 </Avatar>
                 <Input
@@ -541,11 +545,10 @@ export default function ForumPost(props) {
 
       <div className="flex gap-3 items-center">
         <Avatar>
-          {data.foto_profil == null ? (
-            <AvatarImage src={`${apiUrl}/${data.foto_profil}`} />
-          ) : (
-            ""
-          )}
+          <AvatarImage
+            className={"object-cover"}
+            src={`${apiUrl}/${data.foto_profil}`}
+          />
           <AvatarFallback>{getUserInitials(data.name)}</AvatarFallback>
         </Avatar>
         <Input
