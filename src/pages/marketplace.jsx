@@ -20,7 +20,6 @@ import { useToast } from "@/hooks/use-toast.js";
 import { useEffect, useState } from "react";
 import { formatRupiah } from "@/services/format-rupiah.js";
 import { ProductsSkeleton } from "@/components/custom/products-skeleton.jsx";
-import { Skeleton } from "@/components/ui/skeleton.jsx";
 
 export default function Marketplace() {
   const navigate = useNavigate();
@@ -33,7 +32,6 @@ export default function Marketplace() {
   const [whatsappNumber, setWhatsappNumber] = useState("");
   const [products, setProducts] = useState([]);
   const [showProducts, setShowProducts] = useState(false);
-  const [imageLoaded, setImageLoaded] = useState(false);
 
   const handleCardClick = (id) => {
     navigate(`/marketplace/${id}`);
@@ -201,19 +199,13 @@ export default function Marketplace() {
         </div>
 
         <div className="relative">
-          {!imageLoaded && (
-            <Skeleton
-              className={"w-36 lg:w-52 xl:w-72 aspect-square rounded-full"}
+          <div className={"w-36 lg:w-52 xl:w-72"}>
+            <img
+              className={"w-36 lg:w-52 xl:w-72"}
+              src={"src/assets/marketplace/asset1.jpg"}
+              alt={"logo"}
             />
-          )}
-
-          <img
-            className={"w-36 lg:w-52 xl:w-72"}
-            src={"src/assets/marketplace/asset1.jpg"}
-            alt={"logo"}
-            onLoad={() => setImageLoaded(true)}
-            style={{ display: imageLoaded ? "block" : "none" }}
-          />
+          </div>
         </div>
       </div>
 
