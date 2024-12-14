@@ -254,7 +254,7 @@ export default function Marketplace() {
             </div>
           </Card>
         ))
-      ) : (
+      ) : products.length > 0 ? (
         <>
           <ProductsSkeleton />
           <ProductsSkeleton />
@@ -270,6 +270,8 @@ export default function Marketplace() {
           <ProductsSkeleton />
           <ProductsSkeleton />
         </>
+      ) : (
+        ""
       )}
     </div>
   );

@@ -68,6 +68,7 @@ export default function EditProfilePage() {
 
   const handleSubmit = async () => {
     const formData = new FormData();
+
     formData.append("name", nama);
     formData.append("username", username);
     formData.append("email", email);
