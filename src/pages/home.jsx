@@ -47,7 +47,7 @@ export default function HomePage() {
   }, [dispatch, navigate]);
 
   return (
-    <div className="flex w-full flex-col items-center gap-5 bg-white h-[calc(100vh-100px)] justify-center">
+    <div className={"flex w-full flex-col items-center gap-5 justify-center" + (postsData.length > 0 ? 'bg-white h-[calc(100vh-100px)]' : '')}>
       {loginData ? <CreatePost /> : ""}
 
       {postsData.length > 0 ? (
