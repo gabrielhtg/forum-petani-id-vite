@@ -53,7 +53,7 @@ export default function HomePage() {
       ) : (
         <div
           className={
-            "flex w-full items-center justify-center h-[calc(100vh-500px)] font-bold text-xl gap-5 flex-col"
+            "flex w-full items-center justify-center h-[calc(100vh-125px)] font-bold text-xl gap-5 flex-col bg-white rounded-lg"
           }
         >
           <img
