@@ -47,7 +47,7 @@ export default function HomePage() {
   }, [dispatch, navigate]);
 
   return (
-    <div className={"flex w-full flex-col items-center gap-5 justify-center" + (postsData.length > 0 ? 'bg-white h-[calc(100vh-100px)]' : '')}>
+    <div className={"flex w-full flex-col items-center gap-5 justify-center"}>
       {loginData ? <CreatePost /> : ""}
 
       {postsData.length > 0 ? (
@@ -55,7 +55,10 @@ export default function HomePage() {
       ) : (
         <div
           className={
-            "flex w-full items-center justify-center h-[calc(100vh-500px)] font-bold text-xl gap-5 flex-col"
+            "flex w-full items-center justify-center font-bold text-xl gap-5 flex-col rounded-lg" +
+            (loginData
+              ? " h-[calc(100vh-500px)]"
+              : " bg-white h-[calc(100vh-115px)]")
           }
         >
           <img

@@ -21,7 +21,12 @@ import { useEffect, useState } from "react";
 import { formatRupiah } from "@/services/format-rupiah.js";
 import { ProductsSkeleton } from "@/components/custom/products-skeleton.jsx";
 
+// marketplace ini adalah component, yang nanti bisa dipanggil ke component lainnya atau di halman lainnya
+// Ingat figma ada component yang bisa disalin ke halaman lain, begitulah juga ini
 export default function Marketplace() {
+  // disini ada defenisi data data, menggunakan useState
+  // state disini adalahv variable yang khusus untuk react.
+  // ga kaya js biasanya yang pake var atau const biasa, di react pake useState
   const navigate = useNavigate();
   const { toast } = useToast();
   const [nama, setNama] = useState("");
@@ -33,11 +38,15 @@ export default function Marketplace() {
   const [products, setProducts] = useState([]);
   const [showProducts, setShowProducts] = useState(false);
 
+  // ini adalah fungsi yang akan dieksekusi ketika nanti cardnya di click
   const handleCardClick = (id) => {
     navigate(`/marketplace/${id}`);
   };
 
+  // use effect adalah fungsi khusus yang ada di react yang akan dieksekusi saat
+  // halaman di load
   useEffect(() => {
+    // disini yang akan diload adallah data products yang ada di database
     const fetchProducts = async () => {
       try {
         const response = await axios.get(`${apiUrl}/api/products`, {
@@ -56,6 +65,7 @@ export default function Marketplace() {
     fetchProducts().then();
   }, []);
 
+  // ini adalah fungsi yang nanti dipanggil ketika submit data pembuatan product
   const handleCreateProduct = async () => {
     console.log(picture);
     const formData = new FormData();
@@ -155,6 +165,8 @@ export default function Marketplace() {
 
                   <div className="grid w-full items-center gap-1.5 mt-3">
                     <Label htmlFor="input-harga">Harga Produk (Rp)</Label>
+                    {/*di input ini bisa kita lihat bahwa nanti akan diperbarui harganya ketika ada perubahan*/}
+                    {/*yang ditandai dengan onChange. Begitu seterusnya sepreti input lainnya di bawah ini */}
                     <Input
                       onChange={(e) => {
                         setHarga(e.target.value);
@@ -190,6 +202,7 @@ export default function Marketplace() {
                     />
                   </div>
 
+                  {/*Ini dia tadi yang kubilang, ketika tombol submit ini ditekan, maka akan memanggil fungsi handleCreateProduct tadi*/}
                   <Button className={"mt-3"} onClick={handleCreateProduct}>
                     Submit
                   </Button>
@@ -210,6 +223,8 @@ export default function Marketplace() {
         </div>
       </div>
 
+      {/*ini adalah bagian untuk menampilkan produknya. akan ada looping disini yang ditandai dengan adanya*/}
+      {/*map disitu untuk memetakan data dari json array menjadi html*/}
       {showProducts ? (
         products.map((item, index) => (
           <Card
