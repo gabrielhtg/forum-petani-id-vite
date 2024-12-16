@@ -4,7 +4,6 @@ import {
   MessageCircle,
   ThumbsUp,
   Trash2,
-  ExternalLink,
   SendHorizontal,
   PencilLine,
   KeyRound,
@@ -94,10 +93,11 @@ export default function ForumPost(props) {
     setCommentCount(data.total_comments);
 
     // Cek apakah pengguna telah like
-    const userLiked = data.liked_users.includes(
-      localStorage.getItem("username"),
-    );
-    setLiked(userLiked);
+    const username = localStorage.getItem("username");
+    if (username) {
+      const userLiked = data.liked_users.includes(username);
+      setLiked(userLiked);
+    }
   }, [data]);
 
   const handleLike = async () => {
@@ -121,10 +121,7 @@ export default function ForumPost(props) {
 
       fetchPosts();
     } catch (error) {
-      console.error("Error saat memberi like:", error);
-      alert(
-        error.response?.data?.message || "Terjadi kesalahan saat memberi like",
-      );
+      console.log(error);
     }
   };
 
@@ -371,13 +368,53 @@ export default function ForumPost(props) {
       </div>
 
       <div id="post-reaction" className="flex w-full justify-evenly">
-        <Button variant="ghost" className={`flex-1`} onClick={handleLike}>
-          <span className="flex items-center gap-1">
-            <ThumbsUp fill={liked ? "blue" : "none"} />
-            {likeCount}
-          </span>
-          <span className="hidden md:block">Like</span>
-        </Button>
+        {isUsernameExist ? (
+          <Button variant="ghost" className={`flex-1`} onClick={handleLike}>
+            <span className="flex items-center gap-1">
+              <ThumbsUp fill={liked === true ? "blue" : "none"} />
+              {likeCount}
+            </span>
+            <span className="hidden md:block">Like</span>
+          </Button>
+        ) : (
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="ghost" className={`flex-1`} onClick={handleLike}>
+                <span className="flex items-center gap-1">
+                  <ThumbsUp fill={liked === true ? "blue" : "none"} />
+                  {likeCount}
+                </span>
+                <span className="hidden md:block">Like</span>
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="text-center">
+                  Masuk atau Buat Akun Sekarang!
+                </DialogTitle>
+                <DialogDescription>
+                  <div className="flex justify-center flex-col w-full items-center mt-5 gap-3">
+                    <div className="border w-24 h-24 rounded-full flex items-center justify-center text-4xl">
+                      <KeyRound />
+                    </div>
+                    <p>
+                      Kamu tidak bisa melakukan aksi ini karena belum masuk.
+                      Ayooo masuk sekarang juga!!
+                    </p>
+                    <div className="flex w-full gap-3 mt-3">
+                      <Button asChild className="flex-1">
+                        <Link to="/login">Login</Link>
+                      </Button>
+                      <Button asChild className="flex-1">
+                        <Link to="/register">Register</Link>
+                      </Button>
+                    </div>
+                  </div>
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+        )}
 
         <Dialog>
           <DialogTrigger asChild>
@@ -434,17 +471,61 @@ export default function ForumPost(props) {
               </div>
 
               <div id="post-reaction" className="flex w-full justify-evenly">
-                <Button
-                  variant="ghost"
-                  className={`flex-1`}
-                  onClick={handleLike}
-                >
-                  <span className="flex items-center gap-1">
-                    <ThumbsUp fill={liked ? "blue" : "none"} />
-                    {likeCount}
-                  </span>
-                  <span className="hidden md:block">Like</span>
-                </Button>
+                {isUsernameExist ? (
+                  <Button
+                    variant="ghost"
+                    className={`flex-1`}
+                    onClick={handleLike}
+                  >
+                    <span className="flex items-center gap-1">
+                      <ThumbsUp fill={liked === true ? "blue" : "none"} />
+                      {likeCount}
+                    </span>
+                    <span className="hidden md:block">Like</span>
+                  </Button>
+                ) : (
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        className={`flex-1`}
+                        onClick={handleLike}
+                      >
+                        <span className="flex items-center gap-1">
+                          <ThumbsUp fill={liked === true ? "blue" : "none"} />
+                          {likeCount}
+                        </span>
+                        <span className="hidden md:block">Like</span>
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent>
+                      <DialogHeader>
+                        <DialogTitle className="text-center">
+                          Masuk atau Buat Akun Sekarang!
+                        </DialogTitle>
+                        <DialogDescription>
+                          <div className="flex justify-center flex-col w-full items-center mt-5 gap-3">
+                            <div className="border w-24 h-24 rounded-full flex items-center justify-center text-4xl">
+                              <KeyRound />
+                            </div>
+                            <p>
+                              Kamu tidak bisa melakukan aksi ini karena belum
+                              masuk. Ayooo masuk sekarang juga!!
+                            </p>
+                            <div className="flex w-full gap-3 mt-3">
+                              <Button asChild className="flex-1">
+                                <Link to="/login">Login</Link>
+                              </Button>
+                              <Button asChild className="flex-1">
+                                <Link to="/register">Register</Link>
+                              </Button>
+                            </div>
+                          </div>
+                        </DialogDescription>
+                      </DialogHeader>
+                    </DialogContent>
+                  </Dialog>
+                )}
 
                 <Button variant="ghost" className="flex-1">
                   <span className="flex items-center gap-1">
