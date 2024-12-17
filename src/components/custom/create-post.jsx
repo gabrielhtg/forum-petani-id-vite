@@ -175,15 +175,10 @@ export default function CreatePost() {
   return (
     <div
       id="create-post"
-      className="flex justify-center gap-3 border rounded-lg p-5 shadow-sm bg-white w-full lg:w-8/12"
+      className="flex justify-center gap-3 border rounded-lg p-5 shadow-sm bg-white w-full"
     >
       <div className={"flex flex-col w-full"}>
         <Dialog open={open} onOpenChange={setOpen}>
-          {/*<DialogTrigger asChild>*/}
-          {/*  <Button>*/}
-          {/*    <SendHorizontal />*/}
-          {/*  </Button>*/}
-          {/*</DialogTrigger>*/}
           <DialogContent>
             <DialogHeader>
               <DialogTitle className="text-center">

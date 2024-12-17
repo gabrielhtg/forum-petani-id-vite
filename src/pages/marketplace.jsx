@@ -223,72 +223,72 @@ export default function Marketplace() {
         </div>
       </div>
 
-      {/*ini adalah bagian untuk menampilkan produknya. akan ada looping disini yang ditandai dengan adanya*/}
-      {/*map disitu untuk memetakan data dari json array menjadi html*/}
-      {showProducts ? (
-        products.map((item, index) => (
-          <Card
-            key={index}
-            className={
-              "flex flex-col w-[150px] md:w-full max-w-[250px] p-5 gap-3"
-            }
-            onClick={() => handleCardClick(item.id)}
-          >
-            <div>
-              <img
-                className={"w-full aspect-square object-cover"}
-                src={`${apiUrl}/${item.picture}`}
-                alt={"petani"}
-                width={500}
-                height={500}
-                loading={"lazy"}
-              />
-            </div>
+      <div className={"grid lg:grid-cols-6 w-full gap-5"}>
+        {showProducts ? (
+          products.map((item, index) => (
+            <Card
+              key={index}
+              className={"flex flex-col w-[150px] md:w-full w-full p-5 gap-3"}
+              onClick={() => handleCardClick(item.id)}
+            >
+              <div>
+                <img
+                  className={"w-full aspect-square object-cover"}
+                  src={`${apiUrl}/${item.picture}`}
+                  alt={"petani"}
+                  width={500}
+                  height={500}
+                  loading={"lazy"}
+                />
+              </div>
 
-            <div className={"flex flex-col"}>
-              <Truncate
-                lines={1}
-                ellipsis={<span>...</span>}
-                onTruncate={(didTruncate) => {
-                  console.log(didTruncate);
-                }}
-              >
-                <span className={"text-gray-500 font-extralight"}>
-                  {" "}
-                  {item.nama}
+              <div className={"flex flex-col"}>
+                <Truncate
+                  lines={1}
+                  ellipsis={<span>...</span>}
+                  onTruncate={(didTruncate) => {
+                    console.log(didTruncate);
+                  }}
+                >
+                  <span className={"text-gray-500 font-extralight"}>
+                    {" "}
+                    {item.nama}
+                  </span>
+                </Truncate>
+                <span
+                  className={"font-bold text-sm"}
+                >{`${formatRupiah(item.harga)},-`}</span>
+              </div>
+
+              <div>
+                <span
+                  className={"text-gray-500 text-sm flex items-center gap-1"}
+                >
+                  <MapPin size={16} /> {item.lokasi}
                 </span>
-              </Truncate>
-              <span
-                className={"font-bold text-sm"}
-              >{`${formatRupiah(item.harga)},-`}</span>
-            </div>
-
-            <div>
-              <span className={"text-gray-500 text-sm flex items-center gap-1"}>
-                <MapPin size={16} /> {item.lokasi}
-              </span>
-            </div>
-          </Card>
-        ))
-      ) : products.length > 0 ? (
-        <>
-          <ProductsSkeleton />
-          <ProductsSkeleton />
-          <ProductsSkeleton />
-          <ProductsSkeleton />
-          <ProductsSkeleton />
-          <ProductsSkeleton />
-          <ProductsSkeleton />
-          <ProductsSkeleton />
-          <ProductsSkeleton />
-          <ProductsSkeleton />
-          <ProductsSkeleton />
-          <ProductsSkeleton />
-          <ProductsSkeleton />
-        </>
-      ) : (
-        ""
-      )}
+              </div>
+            </Card>
+          ))
+        ) : products.length > 0 ? (
+          <>
+            <ProductsSkeleton />
+            <ProductsSkeleton />
+            <ProductsSkeleton />
+            <ProductsSkeleton />
+            <ProductsSkeleton />
+            <ProductsSkeleton />
+            <ProductsSkeleton />
+            <ProductsSkeleton />
+            <ProductsSkeleton />
+            <ProductsSkeleton />
+            <ProductsSkeleton />
+            <ProductsSkeleton />
+            <ProductsSkeleton />
+          </>
+        ) : (
+          ""
+        )}
+      </div>
     </div>
   );
 }

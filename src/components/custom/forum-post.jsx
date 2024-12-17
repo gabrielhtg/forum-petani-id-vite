@@ -31,7 +31,7 @@ import {
 import axios from "axios";
 import { setPosts } from "@/services/postsSlice.js";
 import { useDispatch } from "react-redux";
-import { useCallback, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast.js";
 
 import {
@@ -40,7 +40,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu.jsx";
-import { useDropzone } from "react-dropzone";
 
 export default function ForumPost(props) {
   const data = props.props;
@@ -53,47 +52,14 @@ export default function ForumPost(props) {
   const [isUsernameExist] = useState(localStorage.getItem("username"));
   const [error, setError] = useState("");
   const [postDisabled, setPostDisabled] = useState(false);
-  const [images, setImages] = useState(data.images);
   const [editCaption, setEditCaption] = useState(data.caption);
-
-  const onDrop = useCallback((acceptedFiles) => {
-    const validFiles = acceptedFiles.filter((file) => {
-      if (!file.type.startsWith("image/")) {
-        setError("Hanya file gambar yang diperbolehkan.");
-        setPostDisabled(true);
-        return false;
-      }
-      if (file.size > 3 * 1024 * 1024) {
-        // 2MB
-        setError("Ukuran file maksimal 2MB.");
-        setPostDisabled(true);
-        return false;
-      }
-      return true;
-    });
-
-    if (validFiles.length > 10) {
-      setError("Maksimal gambar 10");
-      setPostDisabled(true);
-      setImages((prevImages) => [...prevImages, ...validFiles]);
-    }
-
-    // Reset error jika tidak ada masalah
-    if (validFiles.length > 0) {
-      setError("");
-      setPostDisabled("");
-      setImages((prevImages) => [...prevImages, ...validFiles]);
-    }
-  }, []);
-
-  const { getRootProps, getInputProps } = useDropzone({ onDrop });
 
   useEffect(() => {
     setLikeCount(data.total_likes);
     setCommentCount(data.total_comments);
 
-    // Cek apakah pengguna telah like
     const username = localStorage.getItem("username");
+
     if (username) {
       const userLiked = data.liked_users.includes(username);
       setLiked(userLiked);
@@ -182,33 +148,6 @@ export default function ForumPost(props) {
     }
   };
 
-  const removeFile = (fileIndex) => {
-    const updatedImages = images.filter((_, index) => index !== fileIndex);
-
-    setImages(updatedImages);
-  };
-
-  const files = images.map((file, index) => {
-    return (
-      <div key={index} className={"flex flex-col p-3 rounded-lg border gap-3"}>
-        <img
-          src={`${apiUrl}/${file.path}`}
-          alt={`${index}`}
-          className={"w-24 h-24 object-cover"}
-        />
-
-        <Button
-          variant={"destructive"}
-          onClick={() => {
-            removeFile(index);
-          }}
-        >
-          <Trash2 />
-        </Button>
-      </div>
-    );
-  });
-
   const fetchPosts = async () => {
     try {
       const response = await axios.get(`${apiUrl}/api/posts`, {
@@ -235,6 +174,26 @@ export default function ForumPost(props) {
       if (err.status === 401) {
         navigate("/login");
       }
+    }
+  };
+
+  const handleUpdate = async () => {
+    try {
+      const response = await axios.put(
+        `${apiUrl}/api/posts/${data.post_id}`,
+        {
+          caption: editCaption,
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem("token")}`,
+          },
+        },
+      );
+
+      console.log(response);
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -271,9 +230,6 @@ export default function ForumPost(props) {
                     <Button
                       variant={"ghost"}
                       className={"w-full justify-start px-2"}
-                      onClick={() => {
-                        setImages(data.images);
-                      }}
                     >
                       <PencilLine className="mr-2" size={16} />
                       Edit
@@ -296,30 +252,8 @@ export default function ForumPost(props) {
                         {editCaption}
                       </textarea>
 
-                      <section className="container">
-                        <div
-                          {...getRootProps({ className: "dropzone" })}
-                          className="border-2 border-dashed p-10 flex justify-center rounded-lg"
-                        >
-                          <input {...getInputProps()} />
-                          <p>Geser gambar anda ke sini!</p>
-                        </div>
-                        {error && (
-                          <p className="text-red-500 mt-2">{error}</p> // Menampilkan pesan error
-                        )}
-                        <aside className="mt-3">
-                          <h4 className="font-bold">Files</h4>
-                          <div className={"flex mt-3 gap-3 flex-wrap"}>
-                            {files}
-                          </div>
-                        </aside>
-                      </section>
-
                       <div className="flex justify-end items-center mt-4">
-                        <Button
-                          // onClick={handleUpload}
-                          disabled={postDisabled}
-                        >
+                        <Button onClick={handleUpdate} disabled={postDisabled}>
                           <SendHorizontal className="mr-2" />
                           Post
                         </Button>
