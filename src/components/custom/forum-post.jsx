@@ -498,9 +498,11 @@ export default function ForumPost(props) {
                         </AvatarFallback>
                       </Avatar>
                       <div className="comment-content">
-                        <span className="font-bold">
-                          {comment.commenter_name}
-                        </span>
+                        <Link to={`/profile/${comment.commenter_username}`}>
+                          <span className="font-bold">
+                            {comment.commenter_name}
+                          </span>
+                        </Link>
                         <p>{comment.comment_text}</p>
                         <span className="text-slate-500">
                           {formatPostDate(comment.comment_created_at)}

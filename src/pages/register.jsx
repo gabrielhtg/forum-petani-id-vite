@@ -33,13 +33,13 @@ export default function RegisterPage() {
         username: username,
         password: password,
         pekerjaan: pekerjaan,
-        nomorTelepon: nomorTelepone,
+        nomor_telepon: nomorTelepone,
         confirmPassword: confirmPassword,
       });
 
       toast({
         title: "Success",
-        description: response.data.data,
+        description: response.data.message,
         action: (
           <ToastAction asChild altText="Ayo masuk sekarang!">
             <Link to="/login">Ayo masuk sekarang!</Link>
@@ -47,10 +47,11 @@ export default function RegisterPage() {
         ),
       });
     } catch (error) {
+      console.log(error);
       toast({
         variant: "destructive",
         title: "Oppps...",
-        description: error.response.data.data,
+        description: error.response.data.message,
       });
       console.error("Login gagal:", error.response?.data || error.message);
     }

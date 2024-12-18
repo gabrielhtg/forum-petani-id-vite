@@ -1,4 +1,4 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import { Button } from "@/components/ui/button.jsx";
 import { Phone, Ellipsis, Pen, Trash2 } from "lucide-react";
 import { useEffect, useState } from "react";
@@ -98,7 +98,9 @@ export default function ItemDetail() {
           <div className="text-gray-500 text-sm md:text-base mt-2">
             <p>
               Dijual oleh:{" "}
-              <span className="font-medium text-gray-800">{uploader_id}</span>
+              <Link to={`/profile/${uploader_id}`}>
+                <span className="font-medium text-gray-800">{uploader_id}</span>
+              </Link>
             </p>
             <p>
               Lokasi:{" "}
@@ -125,10 +127,10 @@ export default function ItemDetail() {
                 <DropdownMenuContent>
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  <DropdownMenuItem>
-                    <Pen />
-                    Edit
-                  </DropdownMenuItem>
+                  {/*<DropdownMenuItem>*/}
+                  {/*  <Pen />*/}
+                  {/*  Edit*/}
+                  {/*</DropdownMenuItem>*/}
                   <DropdownMenuItem onClick={handleDeleteItem}>
                     <Trash2 /> Delete
                   </DropdownMenuItem>
