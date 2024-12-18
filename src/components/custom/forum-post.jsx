@@ -30,7 +30,7 @@ import {
 } from "@/components/ui/carousel.jsx";
 import axios from "axios";
 import { setPosts } from "@/services/postsSlice.js";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast.js";
 
@@ -46,13 +46,15 @@ export default function ForumPost(props) {
   const [liked, setLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
   const [commentCount, setCommentCount] = useState(data.total_comments);
+  const [comment, setComment] = useState(JSON.parse(data.comments));
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [content, setContent] = useState("");
   const [isUsernameExist] = useState(localStorage.getItem("username"));
-  const [error, setError] = useState("");
-  const [postDisabled, setPostDisabled] = useState(false);
+  const [postDisabled] = useState(false);
   const [editCaption, setEditCaption] = useState(data.caption);
+  const isLogin = useSelector((state) => state.userData.value.username);
+  const userData = useSelector((state) => state.userData.value);
 
   useEffect(() => {
     setLikeCount(data.total_likes);
@@ -84,7 +86,6 @@ export default function ForumPost(props) {
       // Toggle status like dan jumlah like
       setLiked((prev) => !prev);
       setLikeCount((prev) => (liked ? prev - 1 : prev + 1));
-
       fetchPosts();
     } catch (error) {
       console.log(error);
@@ -209,14 +210,16 @@ export default function ForumPost(props) {
             <AvatarFallback>{getUserInitials(data.name)}</AvatarFallback>
           </Avatar>
           <div className="flex flex-col">
-            <span className="font-bold">{data.name}</span>
+            <Link to={`profile/${data.username}`}>
+              <span className="font-bold">{data.name}</span>
+            </Link>
             <span className="text-slate-500">
               {formatPostDate(data.post_created_at)}
             </span>
           </div>
         </div>
 
-        {data.username === localStorage.getItem("username") ? (
+        {data.username === isLogin ? (
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Button variant="ghost" size="icon">
@@ -488,7 +491,7 @@ export default function ForumPost(props) {
                       <Avatar>
                         <AvatarImage
                           className={"object-cover"}
-                          src={`${apiUrl}/${data.foto_profil}`}
+                          src={`${apiUrl}/${comment.commenter_foto_profil}`}
                         />
                         <AvatarFallback>
                           {getUserInitials(comment.commenter_name)}
@@ -512,9 +515,11 @@ export default function ForumPost(props) {
                 <Avatar>
                   <AvatarImage
                     className={"object-cover"}
-                    src={`${apiUrl}/${data.foto_profil}`}
+                    src={`${apiUrl}/${userData.foto_profil}`}
                   />
-                  <AvatarFallback>{getUserInitials(data.name)}</AvatarFallback>
+                  <AvatarFallback>
+                    {getUserInitials(userData.name)}
+                  </AvatarFallback>
                 </Avatar>
                 <Input
                   value={content}
@@ -580,9 +585,9 @@ export default function ForumPost(props) {
         <Avatar>
           <AvatarImage
             className={"object-cover"}
-            src={`${apiUrl}/${data.foto_profil}`}
+            src={`${apiUrl}/${userData.foto_profil}`}
           />
-          <AvatarFallback>{getUserInitials(data.name)}</AvatarFallback>
+          <AvatarFallback>{getUserInitials(userData.name)}</AvatarFallback>
         </Avatar>
         <Input
           value={content}

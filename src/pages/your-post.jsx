@@ -9,7 +9,6 @@ import { setPosts } from "@/services/postsSlice.js";
 export default function YourPost() {
   const navigate = useNavigate();
   const postsData = useSelector((state) => state.posts.value);
-  // const loginData = useSelector((state) => state.isLogin.value);
   const dispatch = useDispatch();
   const [username] = useState(localStorage.getItem("username"));
 

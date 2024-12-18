@@ -17,6 +17,7 @@ import store from "./store.js";
 import YourPost from "@/pages/your-post.jsx";
 import EditProfilePage from "@/pages/profile-edit.jsx";
 import YourProduct from "@/pages/your-product.jsx";
+import ProfileViewPage from "@/pages/profile-view.jsx";
 // import KomunitasPage from "@/pages/komunitas.jsx";
 
 const router = createBrowserRouter([
@@ -48,6 +49,11 @@ const router = createBrowserRouter([
         path: "profile",
         title: "Profile",
         element: <ProfilePage />,
+      },
+      {
+        path: "profile/:id",
+        title: "Profile",
+        element: <ProfileViewPage />,
       },
       {
         path: "profile/edit",

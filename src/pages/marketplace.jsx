@@ -20,13 +20,9 @@ import { useToast } from "@/hooks/use-toast.js";
 import { useEffect, useState } from "react";
 import { formatRupiah } from "@/services/format-rupiah.js";
 import { ProductsSkeleton } from "@/components/custom/products-skeleton.jsx";
+import { useSelector } from "react-redux";
 
-// marketplace ini adalah component, yang nanti bisa dipanggil ke component lainnya atau di halman lainnya
-// Ingat figma ada component yang bisa disalin ke halaman lain, begitulah juga ini
 export default function Marketplace() {
-  // disini ada defenisi data data, menggunakan useState
-  // state disini adalahv variable yang khusus untuk react.
-  // ga kaya js biasanya yang pake var atau const biasa, di react pake useState
   const navigate = useNavigate();
   const { toast } = useToast();
   const [nama, setNama] = useState("");
@@ -37,35 +33,31 @@ export default function Marketplace() {
   const [whatsappNumber, setWhatsappNumber] = useState("");
   const [products, setProducts] = useState([]);
   const [showProducts, setShowProducts] = useState(false);
+  const userData = useSelector((state) => state.userData.value.username);
 
-  // ini adalah fungsi yang akan dieksekusi ketika nanti cardnya di click
   const handleCardClick = (id) => {
     navigate(`/marketplace/${id}`);
   };
 
-  // use effect adalah fungsi khusus yang ada di react yang akan dieksekusi saat
-  // halaman di load
+  const fetchProducts = async () => {
+    try {
+      const response = await axios.get(`${apiUrl}/api/products`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      setProducts(response.data.data);
+
+      setShowProducts(true);
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
-    // disini yang akan diload adallah data products yang ada di database
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(`${apiUrl}/api/products`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem("token")}`,
-          },
-        });
-        setProducts(response.data.data);
-
-        setShowProducts(true);
-      } catch (err) {
-        console.log(err);
-      }
-    };
-
     fetchProducts().then();
   }, []);
 
-  // ini adalah fungsi yang nanti dipanggil ketika submit data pembuatan product
   const handleCreateProduct = async () => {
     console.log(picture);
     const formData = new FormData();
@@ -89,7 +81,7 @@ export default function Marketplace() {
         description: response.data.data,
       });
 
-      window.location.reload();
+      fetchProducts();
     } catch (error) {
       console.log(error);
       toast({
@@ -106,129 +98,134 @@ export default function Marketplace() {
         "flex w-full items-center p-1 md:p-3 gap-3 md:gap-5 flex-wrap justify-center"
       }
     >
-      <div
-        className={
-          "w-full min-h-[120px] border rounded-2xl py-5 px-5 xl:px-48 text-xl flex justify-between items-center bg-white" +
-          (products.length === 0 ? " h-[calc(100vh-140px)]" : "")
-        }
-      >
-        <div className={"flex flex-col items-start"}>
-          <span className={"font-bold text-4xl"}>
-            Punya Barang yang Ingin Dijual?
-          </span>
-          <Dialog>
-            <Button className={"mt-3"} asChild={true}>
-              <DialogTrigger>
-                <Plus />
-                Tambahkan Produk
-              </DialogTrigger>
-            </Button>
+      {userData ? (
+        <div
+          className={
+            "w-full min-h-[120px] border rounded-2xl py-5 px-5 xl:px-48 text-xl flex justify-between items-center bg-white" +
+            (products.length === 0 ? " h-[calc(100vh-140px)]" : "")
+          }
+        >
+          <div className={"flex flex-col items-start"}>
+            <span className={"font-bold text-4xl"}>
+              Punya Barang yang Ingin Dijual?
+            </span>
+            <Dialog>
+              <Button className={"mt-3"} asChild={true}>
+                <DialogTrigger>
+                  <Plus />
+                  Tambahkan Produk
+                </DialogTrigger>
+              </Button>
 
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle>Mau menambahkan apa?</DialogTitle>
-                <DialogDescription className={"text-black!"}>
-                  <div className="grid w-full items-center gap-1.5 mt-3">
-                    <Label htmlFor="input-produk">Nama Produk</Label>
-                    <Input
-                      onChange={(e) => {
-                        setNama(e.target.value);
-                      }}
-                      type="text"
-                      id="input-produk"
-                      placeholder="Ex: Pupuk Organik"
-                    />
-                  </div>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle>Mau menambahkan apa?</DialogTitle>
+                  <DialogDescription className={"text-black!"}>
+                    <div className="grid w-full items-center gap-1.5 mt-3">
+                      <Label htmlFor="input-produk">Nama Produk</Label>
+                      <Input
+                        onChange={(e) => {
+                          setNama(e.target.value);
+                        }}
+                        type="text"
+                        id="input-produk"
+                        placeholder="Ex: Pupuk Organik"
+                      />
+                    </div>
 
-                  <div className="grid w-full items-center gap-1.5 mt-3">
-                    <Label htmlFor="input-foto-produk">Foto Produk</Label>
-                    <Input
-                      onChange={(e) => {
-                        setPicture(e.target.files[0]);
-                      }}
-                      id="input-foto-produk"
-                      type="file"
-                    />
-                  </div>
+                    <div className="grid w-full items-center gap-1.5 mt-3">
+                      <Label htmlFor="input-foto-produk">Foto Produk</Label>
+                      <Input
+                        onChange={(e) => {
+                          setPicture(e.target.files[0]);
+                        }}
+                        id="input-foto-produk"
+                        type="file"
+                      />
+                    </div>
 
-                  <div className="grid w-full gap-1.5 mt-3">
-                    <Label htmlFor="input-deskripsi">Deskripsi Produk</Label>
-                    <Textarea
-                      max={1000}
-                      onChange={(e) => {
-                        setDescription(e.target.value);
-                      }}
-                      placeholder="Ex: Pupuk Organik merupakan pupuk yang dapat menyuburkan tanaman"
-                      id="input-deskripsi"
-                    />
-                  </div>
+                    <div className="grid w-full gap-1.5 mt-3">
+                      <Label htmlFor="input-deskripsi">Deskripsi Produk</Label>
+                      <Textarea
+                        max={1000}
+                        onChange={(e) => {
+                          setDescription(e.target.value);
+                        }}
+                        placeholder="Ex: Pupuk Organik merupakan pupuk yang dapat menyuburkan tanaman"
+                        id="input-deskripsi"
+                      />
+                    </div>
 
-                  <div className="grid w-full items-center gap-1.5 mt-3">
-                    <Label htmlFor="input-harga">Harga Produk (Rp)</Label>
-                    {/*di input ini bisa kita lihat bahwa nanti akan diperbarui harganya ketika ada perubahan*/}
-                    {/*yang ditandai dengan onChange. Begitu seterusnya sepreti input lainnya di bawah ini */}
-                    <Input
-                      onChange={(e) => {
-                        setHarga(e.target.value);
-                      }}
-                      min={0}
-                      type="number"
-                      id="input-harga"
-                      placeholder="Ex: 10000"
-                    />
-                  </div>
+                    <div className="grid w-full items-center gap-1.5 mt-3">
+                      <Label htmlFor="input-harga">Harga Produk (Rp)</Label>
+                      <Input
+                        onChange={(e) => {
+                          setHarga(e.target.value);
+                        }}
+                        min={0}
+                        type="number"
+                        id="input-harga"
+                        placeholder="Ex: 10000"
+                      />
+                    </div>
 
-                  <div className="grid w-full items-center gap-1.5 mt-3">
-                    <Label htmlFor="input-lokasi">Lokasi</Label>
-                    <Input
-                      onChange={(e) => {
-                        setLokasi(e.target.value);
-                      }}
-                      type="text"
-                      id="input-lokasi"
-                      placeholder="Ex: Kota Medan"
-                    />
-                  </div>
+                    <div className="grid w-full items-center gap-1.5 mt-3">
+                      <Label htmlFor="input-lokasi">Lokasi</Label>
+                      <Input
+                        onChange={(e) => {
+                          setLokasi(e.target.value);
+                        }}
+                        type="text"
+                        id="input-lokasi"
+                        placeholder="Ex: Kota Medan"
+                      />
+                    </div>
 
-                  <div className="grid w-full items-center gap-1.5 mt-3">
-                    <Label htmlFor="input-nomor">Nomor WhatsApp</Label>
-                    <Input
-                      onChange={(e) => {
-                        setWhatsappNumber(e.target.value);
-                      }}
-                      type="text"
-                      id="input-nomor"
-                      placeholder="Ex: 0823456789"
-                    />
-                  </div>
+                    <div className="grid w-full items-center gap-1.5 mt-3">
+                      <Label htmlFor="input-nomor">Nomor WhatsApp</Label>
+                      <Input
+                        onChange={(e) => {
+                          setWhatsappNumber(e.target.value);
+                        }}
+                        type="text"
+                        id="input-nomor"
+                        placeholder="Ex: 0823456789"
+                      />
+                    </div>
 
-                  {/*Ini dia tadi yang kubilang, ketika tombol submit ini ditekan, maka akan memanggil fungsi handleCreateProduct tadi*/}
-                  <Button className={"mt-3"} onClick={handleCreateProduct}>
-                    Submit
-                  </Button>
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
-        </div>
+                    <Button className={"mt-3"} onClick={handleCreateProduct}>
+                      Submit
+                    </Button>
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
+          </div>
 
-        <div className="relative">
-          <div className={"w-36 lg:w-52 xl:w-72"}>
-            <img
-              className={"w-36 lg:w-52 xl:w-72"}
-              src={"src/assets/marketplace/asset1.jpg"}
-              alt={"logo"}
-            />
+          <div className="relative">
+            <div className={"w-36 lg:w-52 xl:w-72"}>
+              <img
+                className={"w-36 lg:w-52 xl:w-72"}
+                src={"src/assets/marketplace/asset1.jpg"}
+                alt={"logo"}
+              />
+            </div>
           </div>
         </div>
-      </div>
+      ) : (
+        ""
+      )}
 
-      <div className={"grid lg:grid-cols-6 w-full gap-5"}>
+      <div
+        className={
+          "grid xl:grid-cols-6 lg:grid-cols-4 md:grid-cols-3 sm:grid-cols-2 w-full gap-5"
+        }
+      >
         {showProducts ? (
           products.map((item, index) => (
             <Card
               key={index}
-              className={"flex flex-col w-[150px] md:w-full w-full p-5 gap-3"}
+              className={"flex flex-col md:w-full w-full p-5 gap-3"}
               onClick={() => handleCardClick(item.id)}
             >
               <div>

@@ -101,9 +101,9 @@ export default function LoginPage() {
             <Button variant={"secondary"} className={"w-full"} asChild={true}>
               <Link to={"/register"}>Daftar</Link>
             </Button>
-            <Button variant={"link"} className={"w-full"} asChild={true}>
-              <Link to={"/forgot-password"}>Lupa kata sandi?</Link>
-            </Button>
+            {/*<Button variant={"link"} className={"w-full"} asChild={true}>*/}
+            {/*  <Link to={"/forgot-password"}>Lupa kata sandi?</Link>*/}
+            {/*</Button>*/}
           </div>
         </CardFooter>
       </Card>

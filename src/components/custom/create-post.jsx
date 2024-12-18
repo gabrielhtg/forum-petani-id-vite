@@ -175,7 +175,7 @@ export default function CreatePost() {
   return (
     <div
       id="create-post"
-      className="flex justify-center gap-3 border rounded-lg p-5 shadow-sm bg-white w-full"
+      className="flex justify-center gap-3 border rounded-lg max-w-4xl p-5 shadow-sm bg-white w-full"
     >
       <div className={"flex flex-col w-full"}>
         <Dialog open={open} onOpenChange={setOpen}>
@@ -230,14 +230,14 @@ export default function CreatePost() {
                 <DialogTitle>Buat Postingan Baru</DialogTitle>
               </DialogHeader>
               <div className="flex flex-col gap-4 mt-4">
-                <textarea
+                <Textarea
                   onChange={(e) => {
                     setCaption(e.target.value);
                   }}
                   className="border rounded-lg p-3 w-full text-sm focus:outline-none focus:ring focus:ring-blue-200"
                   placeholder="Tulis sesuatu di sini..."
                   rows="5"
-                ></textarea>
+                />
 
                 <section className="container">
                   <div
