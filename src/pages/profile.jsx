@@ -43,7 +43,7 @@ export default function ProfilePage() {
   return (
     <div
       className={
-        "flex flex-col items-center justify-center gap-3 md:gap-5 p-5 h-[calc(100vh-100px)] bg-white rounded-lg"
+        "flex flex-col items-center justify-center gap-3 md:gap-5 p-5 min-h-[calc(100vh-100px)] bg-white rounded-lg"
       }
     >
       <Avatar className={"w-24 h-24 md:w-60 md:h-60"}>

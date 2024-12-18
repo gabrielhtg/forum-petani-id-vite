@@ -127,10 +127,10 @@ export default function ItemDetail() {
                 <DropdownMenuContent>
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
                   <DropdownMenuSeparator />
-                  {/*<DropdownMenuItem>*/}
-                  {/*  <Pen />*/}
-                  {/*  Edit*/}
-                  {/*</DropdownMenuItem>*/}
+                  <DropdownMenuItem>
+                    <Pen />
+                    Edit
+                  </DropdownMenuItem>
                   <DropdownMenuItem onClick={handleDeleteItem}>
                     <Trash2 /> Delete
                   </DropdownMenuItem>
